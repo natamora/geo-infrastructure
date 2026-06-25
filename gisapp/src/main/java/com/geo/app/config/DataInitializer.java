@@ -2,8 +2,10 @@ package com.geo.app.config;
 
 import com.geo.app.domain.Cable;
 import com.geo.app.domain.Node;
+import com.geo.app.domain.Zone;
 import com.geo.app.repository.CableRepository;
 import com.geo.app.repository.NodeRepository;
+import com.geo.app.repository.ZoneRepository;
 import org.locationtech.jts.geom.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -18,6 +20,9 @@ public class DataInitializer implements CommandLineRunner {
 
     @Autowired
     private CableRepository cableRepository;
+
+    @Autowired
+    private ZoneRepository zoneRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -50,5 +55,21 @@ public class DataInitializer implements CommandLineRunner {
 
         cableRepository.save(cable);
         System.out.println("Test cable saved to database: " + cable);
+
+        Coordinate[] coords = new Coordinate[] {
+            new Coordinate(20.0, 50.0),
+            new Coordinate(22.0, 50.0),
+            new Coordinate(22.0, 52.0),
+            new Coordinate(20.0, 52.0),
+            new Coordinate(20.0, 50.0)
+        };
+
+        Polygon polygon = gf.createPolygon(coords);
+
+        Zone zone = new Zone();
+        zone.setName("Zone1");
+        zone.setArea(polygon);
+        zoneRepository.save(zone);
+
     }
 }
