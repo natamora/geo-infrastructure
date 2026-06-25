@@ -6,8 +6,10 @@ import org.locationtech.jts.geom.Point;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Node {
 
     @Id
@@ -15,11 +17,9 @@ public class Node {
     @Setter(AccessLevel.NONE)
     private Long id;
 
-    @Setter
     @Column(nullable = false)
     private String name;
 
-    @Setter
     @Column(columnDefinition = "geometry(Point, 4326)")
     private Point location;
 }

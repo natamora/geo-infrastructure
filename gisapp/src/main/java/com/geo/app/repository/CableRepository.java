@@ -1,4 +1,11 @@
 package com.geo.app.repository;
 
-public class CableRepository {
+import com.geo.app.domain.Cable;
+import com.geo.app.domain.Node;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface CableRepository extends JpaRepository<Cable,Long> {
+    Cable findByName(String name);
 }
