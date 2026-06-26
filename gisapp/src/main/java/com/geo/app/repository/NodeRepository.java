@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface NodeRepository extends JpaRepository<Node,Long> {
+public interface NodeRepository extends JpaRepository<Node, Long> {
     Node findByName(String name);
 
     @Query("SELECT n FROM Node n JOIN Zone z ON z.id = :zoneId WHERE ST_Intersects(n.location, z.area) = true")

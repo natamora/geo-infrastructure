@@ -22,7 +22,7 @@ public class ZoneController {
     }
 
     @GetMapping("/{zoneId}/nodes")
-    public ResponseEntity<FeatureCollectionDto> getNodes(@PathVariable Long zoneId){
+    public ResponseEntity<FeatureCollectionDto> getNodes(@PathVariable Long zoneId) {
         return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
     }
 
