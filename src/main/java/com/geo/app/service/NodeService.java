@@ -1,28 +1,21 @@
 package com.geo.app.service;
 
 import com.geo.app.geojson.FeatureCollectionDto;
-import com.geo.app.geojson.FeatureDto;
+import com.geo.app.geojson.GeoJsonMapper;
 import com.geo.app.repository.NodeRepository;
-import org.springframework.data.repository.query.Param;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
-
 @Service
+@RequiredArgsConstructor
 public class NodeService {
     private final NodeRepository nodeRepository;
+    private final GeoJsonMapper mapper;
 
-    public NodeService(NodeRepository nodeRepository) {
-        this.nodeRepository = nodeRepository;
-    }
-
-    public FeatureCollectionDto getNodesInZone(@Param("zoneId") Long zoneId) {
+    public FeatureCollectionDto getNodesInZone(Long zoneId) {
 
         var features = nodeRepository.findNodesInZone(zoneId).stream()
-                .map(node -> new FeatureDto(
-                        node.getLocation(),
-                        Map.of("id", node.getId(), "name", node.getName())
-                ))
+                .map(mapper::toFeatureDto)
                 .toList();
 
         return new FeatureCollectionDto(features);

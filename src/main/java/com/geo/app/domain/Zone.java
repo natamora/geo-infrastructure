@@ -18,5 +18,5 @@ public class Zone {
     private String name;
 
     @Column(columnDefinition = "geometry(Polygon, 4326)")
-    private Polygon area;
+    private Polygon shape;
 }

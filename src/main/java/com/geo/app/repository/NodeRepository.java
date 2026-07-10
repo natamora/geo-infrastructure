@@ -12,6 +12,6 @@ import java.util.List;
 public interface NodeRepository extends JpaRepository<Node, Long> {
     Node findByName(String name);
 
-    @Query("SELECT n FROM Node n JOIN Zone z ON z.id = :zoneId WHERE ST_Intersects(n.location, z.area) = true")
+    @Query("SELECT n FROM Node n JOIN Zone z ON z.id = :zoneId WHERE ST_Intersects(n.shape, z.shape) = true")
     List<Node> findNodesInZone(@Param("zoneId") Long zoneId);
 }

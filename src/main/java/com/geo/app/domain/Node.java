@@ -21,5 +21,5 @@ public class Node {
     private String name;
 
     @Column(columnDefinition = "geometry(Point, 4326)")
-    private Point location;
+    private Point shape;
 }

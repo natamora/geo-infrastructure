@@ -1,10 +1,9 @@
 package com.geo.app.controller;
 
 import com.geo.app.geojson.FeatureCollectionDto;
+import com.geo.app.geojson.FeatureDto;
 import com.geo.app.service.NodeService;
 import com.geo.app.service.ZoneService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,14 +20,18 @@ public class ZoneController {
         this.zoneService = zoneService;
     }
 
-    @GetMapping("/{zoneId}/nodes")
-    public ResponseEntity<FeatureCollectionDto> getNodes(@PathVariable Long zoneId) {
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
-    }
-
     @GetMapping()
-    public ResponseEntity<FeatureCollectionDto> getAllZones() {
-        return ResponseEntity.ok(zoneService.getAllZones());
+    public FeatureCollectionDto getAllZones() {
+        return zoneService.getAllZones();
     }
 
+    @GetMapping("/{id}")
+    public FeatureDto getZoneById(@PathVariable Long id) {
+        return zoneService.getZoneById(id);
+    }
+
+    @GetMapping("/{id}/nodes")
+    public FeatureCollectionDto getNodes(@PathVariable Long id) {
+        return nodeService.getNodesInZone(id);
+    }
 }

@@ -1,6 +1,8 @@
 package com.geo.app.service;
 
+import com.geo.app.exception.ResourceNotFoundException;
 import com.geo.app.geojson.FeatureCollectionDto;
+import com.geo.app.geojson.FeatureDto;
 import com.geo.app.geojson.GeoJsonMapper;
 import com.geo.app.repository.ZoneRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,5 +21,11 @@ public class ZoneService {
                 .toList();
 
         return new FeatureCollectionDto(features);
+    }
+
+    public FeatureDto getZoneById(Long id) {
+        return zoneRepository.findById(id)
+                .map(mapper::toFeatureDto)
+                .orElseThrow(() -> new ResourceNotFoundException("Zone with ID " + id + " not found"));
     }
 }

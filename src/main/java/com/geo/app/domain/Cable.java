@@ -19,7 +19,7 @@ public class Cable {
     private String name;
 
     @Column(columnDefinition = "geometry(LineString, 4326)")
-    private LineString path;
+    private LineString shape;
 
     @ManyToOne
     @JoinColumn(name = "start_node_id")

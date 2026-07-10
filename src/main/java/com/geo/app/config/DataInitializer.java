@@ -30,13 +30,13 @@ public class DataInitializer implements CommandLineRunner {
 
         Node node = new Node();
         node.setName("Node-" + UUID.randomUUID().toString().substring(0, 8));
-        node.setLocation(p);
+        node.setShape(p);
         nodeRepository.save(node);
         System.out.println("Test point saved to database: " + node);
 
         Node node2 = new Node();
         node2.setName("Node-" + UUID.randomUUID().toString().substring(0, 8));
-        node2.setLocation(p2);
+        node2.setShape(p2);
         nodeRepository.save(node2);
         System.out.println("Test point2 saved to database: " + node2);
 
@@ -46,11 +46,11 @@ public class DataInitializer implements CommandLineRunner {
         cable.setEndNode(node2);
 
         LineString path = gf.createLineString(new Coordinate[]{
-                node.getLocation().getCoordinate(),
-                node2.getLocation().getCoordinate()
+                node.getShape().getCoordinate(),
+                node2.getShape().getCoordinate()
         });
         path.setSRID(4326);
-        cable.setPath(path);
+        cable.setShape(path);
 
         cableRepository.save(cable);
         System.out.println("Test cable saved to database: " + cable);
@@ -68,7 +68,7 @@ public class DataInitializer implements CommandLineRunner {
 
         Zone zone = new Zone();
         zone.setName("Zone-" + UUID.randomUUID().toString().substring(0, 8));
-        zone.setArea(polygon);
+        zone.setShape(polygon);
         zoneRepository.save(zone);
 
     }
