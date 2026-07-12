@@ -19,35 +19,26 @@ public class DataInitializer implements CommandLineRunner {
     private final NodeRepository nodeRepository;
     private final ZoneRepository zoneRepository;
     private final CableRepository cableRepository;
+    private final GeometryFactory gf = new GeometryFactory();
 
     @Override
     public void run(String... args) throws Exception {
-        GeometryFactory gf = new GeometryFactory();
-        Point p = gf.createPoint(new Coordinate(20.0, 50.0));
-        Point p2 = gf.createPoint(new Coordinate(20.1, 50.1));
-        p.setSRID(4326);
-        p2.setSRID(4326);
+        Node n = createNode("Node-" + UUID.randomUUID().toString().substring(0, 8), 20.0, 50.0 );
+        Node n2 = createNode("Node-" + UUID.randomUUID().toString().substring(0, 8), 20.1, 50.1 );
 
-        Node node = new Node();
-        node.setName("Node-" + UUID.randomUUID().toString().substring(0, 8));
-        node.setShape(p);
-        nodeRepository.save(node);
-        System.out.println("Test point saved to database: " + node);
-
-        Node node2 = new Node();
-        node2.setName("Node-" + UUID.randomUUID().toString().substring(0, 8));
-        node2.setShape(p2);
-        nodeRepository.save(node2);
-        System.out.println("Test point2 saved to database: " + node2);
+        nodeRepository.save(n);
+        System.out.println("Test point saved to database: " + n);
+        nodeRepository.save(n2);
+        System.out.println("Test point2 saved to database: " + n2);
 
         Cable cable = new Cable();
         cable.setName("Cable-" + UUID.randomUUID().toString().substring(0, 8));
-        cable.setStartNode(node);
-        cable.setEndNode(node2);
+        cable.setStartNode(n);
+        cable.setEndNode(n2);
 
         LineString path = gf.createLineString(new Coordinate[]{
-                node.getShape().getCoordinate(),
-                node2.getShape().getCoordinate()
+                n.getShape().getCoordinate(),
+                n2.getShape().getCoordinate()
         });
         path.setSRID(4326);
         cable.setShape(path);
@@ -55,21 +46,27 @@ public class DataInitializer implements CommandLineRunner {
         cableRepository.save(cable);
         System.out.println("Test cable saved to database: " + cable);
 
-        Coordinate[] coords = new Coordinate[]{
+        Polygon poly = gf.createPolygon(new Coordinate[]{
                 new Coordinate(20.0, 50.0),
                 new Coordinate(22.0, 50.0),
                 new Coordinate(22.0, 52.0),
                 new Coordinate(20.0, 52.0),
                 new Coordinate(20.0, 50.0)
-        };
-
-        Polygon polygon = gf.createPolygon(coords);
-        polygon.setSRID(4326);
+        });
+        poly.setSRID(4326);
 
         Zone zone = new Zone();
         zone.setName("Zone-" + UUID.randomUUID().toString().substring(0, 8));
-        zone.setShape(polygon);
+        zone.setShape(poly);
         zoneRepository.save(zone);
+    }
 
+    private Node createNode(String name, double x, double y) {
+        Point p = gf.createPoint(new Coordinate(x, y));
+        p.setSRID(4326);
+        Node node = new Node();
+        node.setName(name);
+        node.setShape(p);
+        return node;
     }
 }

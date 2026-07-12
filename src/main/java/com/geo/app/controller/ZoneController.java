@@ -1,5 +1,6 @@
 package com.geo.app.controller;
 
+import com.geo.app.dto.BoundingBox;
 import com.geo.app.geojson.FeatureCollectionDto;
 import com.geo.app.geojson.FeatureDto;
 import com.geo.app.service.NodeService;
@@ -21,8 +22,8 @@ public class ZoneController {
     }
 
     @GetMapping()
-    public FeatureCollectionDto getAllZones() {
-        return zoneService.getAllZones();
+    public FeatureCollectionDto getZones(BoundingBox bbox) {
+        return zoneService.getZones(bbox);
     }
 
     @GetMapping("/{id}")

@@ -1,6 +1,8 @@
 package com.geo.app.repository;
 
 import com.geo.app.domain.Node;
+import com.geo.app.domain.Zone;
+import org.locationtech.jts.geom.Geometry;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,7 +12,9 @@ import java.util.List;
 
 @Repository
 public interface NodeRepository extends JpaRepository<Node, Long> {
-    Node findByName(String name);
+
+    @Query("SELECT n FROM Node n WHERE ST_Intersects(n.shape, :bbox) = true")
+    List<Node> findByBBox(@Param("bbox") Geometry bbox);
 
     @Query("SELECT n FROM Node n JOIN Zone z ON z.id = :zoneId WHERE ST_Intersects(n.shape, z.shape) = true")
     List<Node> findNodesInZone(@Param("zoneId") Long zoneId);

@@ -11,6 +11,7 @@ import org.locationtech.jts.geom.LineString;
 @AllArgsConstructor
 @ToString(exclude = {"startNode", "endNode"})
 public class Cable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)

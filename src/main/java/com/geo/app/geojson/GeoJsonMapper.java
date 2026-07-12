@@ -1,5 +1,6 @@
 package com.geo.app.geojson;
 
+import com.geo.app.domain.Cable;
 import com.geo.app.domain.Node;
 import com.geo.app.domain.Zone;
 import org.springframework.stereotype.Component;
@@ -29,6 +30,16 @@ public class GeoJsonMapper {
         return new FeatureDto(
                 writer.write(node.getShape()),
                 Map.of("id", node.getId(), "name", node.getName())
+        );
+    }
+
+    public FeatureDto toFeatureDto(Cable cable) {
+        Objects.requireNonNull(cable);
+        Objects.requireNonNull(cable.getShape());
+
+        return new FeatureDto(
+                writer.write(cable.getShape()),
+                Map.of("id", cable.getId(), "name", cable.getName())
         );
     }
 }

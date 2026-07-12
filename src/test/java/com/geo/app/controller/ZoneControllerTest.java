@@ -17,6 +17,7 @@ import org.wololo.geojson.Polygon;
 import java.util.List;
 import java.util.Map;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -76,7 +77,7 @@ public class ZoneControllerTest {
         FeatureDto mockFeature2 = new FeatureDto(geometry, properties2);
         FeatureCollectionDto mockFeatureCollection = new FeatureCollectionDto(List.of(mockFeature1, mockFeature2));
 
-        when(zoneService.getAllZones()).thenReturn(mockFeatureCollection);
+        when(zoneService.getZones(any())).thenReturn(mockFeatureCollection);
 
         mockMvc.perform(get("/api/zones").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

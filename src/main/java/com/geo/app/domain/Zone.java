@@ -10,6 +10,7 @@ import org.locationtech.jts.geom.Polygon;
 @NoArgsConstructor
 @ToString
 public class Zone {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)

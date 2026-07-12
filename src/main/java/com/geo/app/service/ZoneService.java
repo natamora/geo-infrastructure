@@ -1,5 +1,6 @@
 package com.geo.app.service;
 
+import com.geo.app.dto.BoundingBox;
 import com.geo.app.exception.ResourceNotFoundException;
 import com.geo.app.geojson.FeatureCollectionDto;
 import com.geo.app.geojson.FeatureDto;
@@ -14,9 +15,12 @@ public class ZoneService {
     private final ZoneRepository zoneRepository;
     private final GeoJsonMapper mapper;
 
+    public FeatureCollectionDto getZones(BoundingBox bbox) {
+        var entities = bbox.getBoundingBox()
+                .map(zoneRepository::findByBBox)
+                .orElseGet(zoneRepository::findAll);
 
-    public FeatureCollectionDto getAllZones() {
-        var features = zoneRepository.findAll().stream()
+        var features = entities.stream()
                 .map(mapper::toFeatureDto)
                 .toList();
 
