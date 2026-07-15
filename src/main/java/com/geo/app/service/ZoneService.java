@@ -16,7 +16,7 @@ public class ZoneService {
     private final GeoJsonMapper mapper;
 
     public FeatureCollectionDto getZones(BoundingBox bbox) {
-        var entities = bbox.getBoundingBox()
+        var entities = bbox.toGeometry()
                 .map(zoneRepository::findByBBox)
                 .orElseGet(zoneRepository::findAll);
 

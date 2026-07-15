@@ -1,0 +1,18 @@
+body, html, #root {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.my-custom-label {
+    font-size: 14px !important;;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    font-weight: bold;
+}
+
+.my-custom-label:before {
+    display: none !important;
+}

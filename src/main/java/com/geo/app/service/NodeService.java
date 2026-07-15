@@ -14,7 +14,7 @@ public class NodeService {
     private final GeoJsonMapper mapper;
 
     public FeatureCollectionDto getNodes(BoundingBox bbox) {
-        var entities = bbox.getBoundingBox()
+        var entities = bbox.toGeometry()
                 .map(nodeRepository::findByBBox)
                 .orElseGet(nodeRepository::findAll);
 

@@ -14,7 +14,7 @@ public class CableService {
     private final GeoJsonMapper mapper;
 
     public FeatureCollectionDto getCables(BoundingBox bbox) {
-        var entities = bbox.getBoundingBox()
+        var entities = bbox.toGeometry()
                 .map(cableRepository::findByBBox)
                 .orElseGet(cableRepository::findAll);
 

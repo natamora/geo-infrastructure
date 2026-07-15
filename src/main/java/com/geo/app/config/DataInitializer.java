@@ -23,8 +23,8 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Node n = createNode("Node-" + UUID.randomUUID().toString().substring(0, 8), 20.0, 50.0 );
-        Node n2 = createNode("Node-" + UUID.randomUUID().toString().substring(0, 8), 20.1, 50.1 );
+        Node n = createNode("Node-" + UUID.randomUUID().toString().substring(0, 8), 20.0, 50.0);
+        Node n2 = createNode("Node-" + UUID.randomUUID().toString().substring(0, 8), 20.1, 50.1);
 
         nodeRepository.save(n);
         System.out.println("Test point saved to database: " + n);
