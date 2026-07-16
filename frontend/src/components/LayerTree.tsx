@@ -1,23 +1,24 @@
-import {Paper, Stack, Checkbox} from '@mantine/core';
+import {Checkbox, Paper, Stack} from '@mantine/core';
+import {useMapStore} from "../store/useMapStore.ts";
+import {LAYER_CONFIGS} from "../models/layers.ts";
 
-export const LayerTree = ({visibleLayers, setVisibleLayers}: any) => (
-    <div style={{position: 'absolute', bottom: 20, left: 20, zIndex: 1000}}>
-        <Paper shadow="md" p="md" withBorder>
-            <Stack gap="xs">
-                {Object.entries(visibleLayers).map(([key, value]) => (
-                    <Checkbox
-                        key={key}
-                        label={key.charAt(0).toUpperCase() + key.slice(1)}
-                        checked={value as boolean}
-                        onChange={(e) => {
-                            const isChecked = e.currentTarget.checked;
-                            setVisibleLayers((prev: any) => ({...prev, [key]: isChecked}))
-                        }
+export const LayerTree = () => {
+    const {visibleLayers, toggleLayer} = useMapStore();
 
-                        }
-                    />
-                ))}
-            </Stack>
-        </Paper>
-    </div>
-);
+    return (
+        <div style={{position: 'absolute', bottom: 20, left: 20, zIndex: 1000}}>
+            <Paper shadow="md" p="md" withBorder>
+                <Stack gap="xs">
+                    {LAYER_CONFIGS.map((layer) => (
+                        <Checkbox
+                            key={layer.id}
+                            label={layer.label}
+                            checked={visibleLayers[layer.id]}
+                            onChange={() => toggleLayer(layer.id)}
+                        />
+                    ))}
+                </Stack>
+            </Paper>
+        </div>
+    )
+};
