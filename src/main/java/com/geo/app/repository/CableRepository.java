@@ -1,7 +1,6 @@
 package com.geo.app.repository;
 
-import com.geo.app.domain.Cable;
-import com.geo.app.domain.Zone;
+import com.geo.app.domain.entity.Cable;
 import org.locationtech.jts.geom.Geometry;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,4 +15,5 @@ public interface CableRepository extends JpaRepository<Cable, Long> {
     @Query("SELECT c FROM Cable c WHERE ST_Intersects(c.shape, :bbox) = true")
     List<Cable> findByBBox(@Param("bbox") Geometry bbox);
 
+    boolean existsByStartNodeIdOrEndNodeId(Long startNodeId, Long endNodeId);
 }

@@ -48,7 +48,7 @@ public class ZoneControllerTest {
         Long zoneId = 1L;
         String zoneName = "Zone1";
         Map<String, Object> properties = Map.of("name", zoneName, "id", zoneId);
-        GeoJSON geometry = new Polygon(new double[][][]{{{21.0, 52.0}, {21.1, 52.1}, {21.0, 52.0}}});
+        Polygon geometry = new Polygon(new double[][][]{{{21.0, 52.0}, {21.1, 52.1}, {21.0, 52.0}}});
         FeatureDto mockFeature = new FeatureDto(geometry, properties);
 
         when(zoneService.getZoneById(zoneId)).thenReturn(mockFeature);
@@ -72,7 +72,7 @@ public class ZoneControllerTest {
 
         Map<String, Object> properties = Map.of("name", zoneName, "id", zoneId);
         Map<String, Object> properties2 = Map.of("name", zoneName2, "id", zoneId2);
-        GeoJSON geometry = new Polygon(new double[][][]{{{21.0, 52.0}, {21.1, 52.1}, {21.0, 52.0}}});
+        Polygon geometry = new Polygon(new double[][][]{{{21.0, 52.0}, {21.1, 52.1}, {21.0, 52.0}}});
         FeatureDto mockFeature1 = new FeatureDto(geometry, properties);
         FeatureDto mockFeature2 = new FeatureDto(geometry, properties2);
         FeatureCollectionDto mockFeatureCollection = new FeatureCollectionDto(List.of(mockFeature1, mockFeature2));

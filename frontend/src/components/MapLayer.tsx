@@ -12,7 +12,7 @@ interface MapLayerProps {
 
 export const MapLayer = ({layerConfig, pane}: MapLayerProps) => {
     const map = useMap();
-    const {visibleLayers, bbox, selectFeature} = useMapStore();
+    const {mode, visibleLayers, bbox, selectFeature} = useMapStore();
 
     const isVisible = visibleLayers[layerConfig.id];
     const {data, isLoading} = useLayerData(layerConfig, bbox, isVisible);
@@ -22,7 +22,6 @@ export const MapLayer = ({layerConfig, pane}: MapLayerProps) => {
         return null;
     }
 
-    // Logika wewnątrz komponentu
     const onEachFeature = (feature: any, layer: L.Layer) => {
         if (feature.properties?.name) {
             layer.bindTooltip(feature.properties.name, {
@@ -32,7 +31,58 @@ export const MapLayer = ({layerConfig, pane}: MapLayerProps) => {
                 className: 'my-custom-label'
             });
         }
-        layer.on('click', () => selectFeature(feature));
+        layer.on({
+            click: (e) => {L.DomEvent.stopPropagation(e);
+            console.log('clicked');
+
+                if (useMapStore.getState().mode === 'DRAW_CABLE') {
+                    const isPointLayer = feature.geometry?.type === 'Point';
+                    if (isPointLayer) {
+                        useMapStore.getState().setDrawingStartedFromNode(true);
+                        console.log("layer-click: Kliknięto w węzeł startowy");
+                    }
+                    map.fire('click',e);
+                    return;
+
+                }
+                if (useMapStore.getState().mode === 'DRAW_ZONE') {
+                    map.fire('click',e);
+                }
+
+            console.log("Kliknieto w warstwe: ", layerConfig.id);
+            console.log(mode + " Selected feature: " + feature.properties.name + " feature: " + feature);
+            selectFeature(feature)
+        },
+            mouseover: (e) => {
+                const targetLayer = e.target;
+                const geomType = feature.geometry?.type;
+
+                if (geomType === 'Polygon' || geomType === 'MultiPolygon') {
+                    if (targetLayer.setStyle) {
+                        targetLayer.setStyle({ fillOpacity: (targetLayer.options.fillOpacity || 0.1) + 0.1 });
+                    }
+                } else if (geomType === 'LineString' || geomType === 'MultiLineString') {
+                    if (targetLayer.setStyle) {
+                        targetLayer.setStyle({ weight: (targetLayer.options.weight || 3) + 1, opacity: (targetLayer.options.opacity || 1) - 0.1 });
+                    }
+                }
+            },
+
+            mouseout: (e) => {
+                const targetLayer = e.target;
+                const geomType = feature.geometry?.type;
+
+                if (geomType === 'Polygon' || geomType === 'MultiPolygon') {
+                    if (targetLayer.setStyle) {
+                        targetLayer.setStyle({ fillOpacity: (targetLayer.options.fillOpacity || 0.1) - 0.1 });
+                    }
+                } else if (geomType === 'LineString' || geomType === 'MultiLineString') {
+                    if (targetLayer.setStyle) {
+                        targetLayer.setStyle({ weight: (targetLayer.options.weight || 4) - 1, opacity: (targetLayer.options.opacity || 1) + 0.1 });
+                    }
+                }
+            }
+        });
     };
 
     const pointToLayer = layerConfig.iconType
@@ -41,9 +91,12 @@ export const MapLayer = ({layerConfig, pane}: MapLayerProps) => {
         })
         : undefined;
 
+    const features = data?.features || [];
+    const dataHash = `${features.length}-${features[features.length - 1]?.id || ''}`;
+
     return (
         <GeoJSON
-            key={layerConfig.id}
+            key={`${layerConfig.id}-${dataHash}`}
             pane={pane}
             data={data}
             style={layerConfig.style}

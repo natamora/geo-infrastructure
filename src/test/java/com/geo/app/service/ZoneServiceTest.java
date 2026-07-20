@@ -1,6 +1,6 @@
 package com.geo.app.service;
 
-import com.geo.app.domain.Zone;
+import com.geo.app.domain.entity.Zone;
 import com.geo.app.geojson.FeatureDto;
 import com.geo.app.geojson.GeoJsonMapper;
 import com.geo.app.repository.ZoneRepository;

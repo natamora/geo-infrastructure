@@ -1,6 +1,6 @@
 package com.geo.app.integration;
 
-import com.geo.app.domain.Zone;
+import com.geo.app.domain.entity.Zone;
 import com.geo.app.repository.ZoneRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

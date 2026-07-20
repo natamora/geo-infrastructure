@@ -1,4 +1,7 @@
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
+import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 import {MantineProvider} from '@mantine/core';
 import {StrictMode} from 'react'
 import {createRoot} from 'react-dom/client'
@@ -11,6 +14,7 @@ createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <QueryClientProvider client={queryClient}>
             <MantineProvider>
+                {/*<Notifications/>*/}
                 <App/>
             </MantineProvider>
         </QueryClientProvider>

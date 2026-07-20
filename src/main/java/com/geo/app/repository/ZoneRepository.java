@@ -1,6 +1,6 @@
 package com.geo.app.repository;
 
-import com.geo.app.domain.Zone;
+import com.geo.app.domain.entity.Zone;
 import org.locationtech.jts.geom.Geometry;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

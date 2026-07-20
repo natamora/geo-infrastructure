@@ -1,10 +1,13 @@
 CREATE TABLE cable
 (
-    id            BIGSERIAL PRIMARY KEY,
-    name          VARCHAR(255),
-    start_node_id BIGINT NOT NULL,
-    end_node_id   BIGINT NOT NULL,
-    shape          geometry(LineString, 4326),
+    id                BIGSERIAL PRIMARY KEY,
+    name              VARCHAR(255) NOT NULL,
+    type              VARCHAR(50),
+    status            VARCHAR(20),
+    installation_date DATE,
+    start_node_id     BIGINT       NOT NULL,
+    end_node_id       BIGINT       NOT NULL,
+    shape             geometry(LineString, 4326),
     CONSTRAINT fk_start_node FOREIGN KEY (start_node_id) REFERENCES node (id),
     CONSTRAINT fk_end_node FOREIGN KEY (end_node_id) REFERENCES node (id)
 );

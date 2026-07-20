@@ -1,8 +1,12 @@
 package com.geo.app.config;
 
-import com.geo.app.domain.Cable;
-import com.geo.app.domain.Node;
-import com.geo.app.domain.Zone;
+import com.geo.app.domain.entity.Cable;
+import com.geo.app.domain.entity.Node;
+import com.geo.app.domain.entity.Zone;
+import com.geo.app.domain.enums.CableType;
+import com.geo.app.domain.enums.LifeCycleStatus;
+import com.geo.app.domain.enums.NodeType;
+import com.geo.app.domain.enums.ZoneClass;
 import com.geo.app.repository.CableRepository;
 import com.geo.app.repository.NodeRepository;
 import com.geo.app.repository.ZoneRepository;
@@ -11,6 +15,7 @@ import org.locationtech.jts.geom.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Component
@@ -35,6 +40,9 @@ public class DataInitializer implements CommandLineRunner {
         cable.setName("Cable-" + UUID.randomUUID().toString().substring(0, 8));
         cable.setStartNode(n);
         cable.setEndNode(n2);
+        cable.setType(CableType.FIBER);
+        cable.setInstallationDate(LocalDate.now());
+        cable.setStatus(LifeCycleStatus.ACTIVE);
 
         LineString path = gf.createLineString(new Coordinate[]{
                 n.getShape().getCoordinate(),
@@ -58,6 +66,8 @@ public class DataInitializer implements CommandLineRunner {
         Zone zone = new Zone();
         zone.setName("Zone-" + UUID.randomUUID().toString().substring(0, 8));
         zone.setShape(poly);
+        zone.setZoneClass(ZoneClass.RESIDENTIAL);
+        zone.setStatus(LifeCycleStatus.ACTIVE);
         zoneRepository.save(zone);
     }
 
@@ -67,6 +77,9 @@ public class DataInitializer implements CommandLineRunner {
         Node node = new Node();
         node.setName(name);
         node.setShape(p);
+        node.setType(NodeType.BUILDING);
+        node.setStatus(LifeCycleStatus.ACTIVE);
+        node.setInstallationDate(LocalDate.now());
         return node;
     }
 }

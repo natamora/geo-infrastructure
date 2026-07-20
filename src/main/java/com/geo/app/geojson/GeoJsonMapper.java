@@ -1,11 +1,12 @@
 package com.geo.app.geojson;
 
-import com.geo.app.domain.Cable;
-import com.geo.app.domain.Node;
-import com.geo.app.domain.Zone;
+import com.geo.app.domain.entity.Cable;
+import com.geo.app.domain.entity.Node;
+import com.geo.app.domain.entity.Zone;
 import org.springframework.stereotype.Component;
 import org.wololo.jts2geojson.GeoJSONWriter;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -19,7 +20,7 @@ public class GeoJsonMapper {
 
         return new FeatureDto(
                 writer.write(zone.getShape()),
-                Map.of("id", zone.getId(), "name", zone.getName())
+                mapProperties(zone)
         );
     }
 
@@ -29,7 +30,7 @@ public class GeoJsonMapper {
 
         return new FeatureDto(
                 writer.write(node.getShape()),
-                Map.of("id", node.getId(), "name", node.getName())
+                mapProperties(node)
         );
     }
 
@@ -39,7 +40,38 @@ public class GeoJsonMapper {
 
         return new FeatureDto(
                 writer.write(cable.getShape()),
-                Map.of("id", cable.getId(), "name", cable.getName())
+                mapProperties(cable)
         );
+    }
+
+    private Map<String, Object> mapProperties(Node node) {
+        Map<String, Object> props = new HashMap<>();
+        props.put("id", node.getId());
+        props.put("name", node.getName());
+        props.put("type", node.getType());
+        props.put("status", node.getStatus());
+        props.put("installation_date", node.getInstallationDate());
+        return props;
+    }
+
+    private Map<String, Object> mapProperties(Cable cable) {
+        Map<String, Object> props = new HashMap<>();
+        props.put("id", cable.getId());
+        props.put("name", cable.getName());
+        props.put("type", cable.getType());
+        props.put("status", cable.getStatus());
+        props.put("installation_date", cable.getInstallationDate());
+        props.put("start_node_id", cable.getStartNode().getId());
+        props.put("end_node_id", cable.getEndNode().getId());
+        return props;
+    }
+
+    private Map<String, Object> mapProperties(Zone zone) {
+        Map<String, Object> props = new HashMap<>();
+        props.put("id", zone.getId());
+        props.put("name", zone.getName());
+        props.put("zone_class", zone.getZoneClass());
+        props.put("status", zone.getStatus());
+        return props;
     }
 }

@@ -1,6 +1,6 @@
 package com.geo.app.geojson;
 
-import com.geo.app.domain.Zone;
+import com.geo.app.domain.entity.Zone;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;

@@ -1,7 +1,6 @@
 package com.geo.app.repository;
 
-import com.geo.app.domain.Node;
-import com.geo.app.domain.Zone;
+import com.geo.app.domain.entity.Node;
 import org.locationtech.jts.geom.Geometry;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,4 +17,5 @@ public interface NodeRepository extends JpaRepository<Node, Long> {
 
     @Query("SELECT n FROM Node n JOIN Zone z ON z.id = :zoneId WHERE ST_Intersects(n.shape, z.shape) = true")
     List<Node> findNodesInZone(@Param("zoneId") Long zoneId);
+
 }

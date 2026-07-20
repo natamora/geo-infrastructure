@@ -23,22 +23,26 @@ The goal is to deliver backend solution that utilizes Spring-based architecture 
 * **Contenerization & DevOps**: Docker, Docker Compose, Google Cloud Run (target)
 * **Testing**: JUnit 5, Mockito, AssertJ, Testcontainers (target for ephemeral database testing)
 * **API & Data**: RESTful architecture, GeoJSON for spatial data serialization
+* **Frontend**: TypeScript, React, TanStack Query, Zustand, Leaflet
 
 ## :white_check_mark: Implementation Status
+* Basic Frontend: Adding dynamic layers, Shape geometry creation, DetailsPanel, LayerTree
+* Basic CRUD endpoints for objects
 *  Project skeleton with JTS and PostGIS integration
-* Basic GET endpoints for geometries with GeoJSON mapping
+* Basic GET endpoints for geometries with GeoJSON mapping with BBOX filtering
 * Basic endpoint with spatial filtering (ST_Intersects)
 * Simple global exception handling
-* Basic multi-layered test coverage (Unit, Service, Controller and Integration tests)
+* Basic multi-layered test coverage example (Unit, Service, Controller and Integration tests)
 
 ### :dart: Most recent pending goals: 
-* [ ] Full Node and Cable implementation
-* [ ] Data validation
+* [ ] Improve frontend (WIP)
+* [ ] Full Node and Cable implementation (WIP)
+* [ ] Data validation (WIP)
 * [ ] Risk Assessment Engine & maintenance task generation logic
-* [ ] Advanced API filtering: Bounding Box (BBOX) and query parameter support
-* [ ] Integrating Swagger
+* [ ] Advanced API filtering
+* [ ] Integrating Swagger (WIP)
 * [ ] Spring Security
-* [ ] Cloud-native migration and deployment with Google Cloud Run
+* [ ] Cloud-native migration and deployment with Google Cloud Run (WIP)
 
 Application goals gonna be updated by the evolving of the application.
 

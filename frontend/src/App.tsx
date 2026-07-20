@@ -5,11 +5,12 @@ import {LayerTree} from "./components/LayerTree.tsx";
 import {MapController} from "./components/MapController.tsx";
 import {CreationMenu} from "./components/CreationMenu.tsx";
 import {MapLayer} from "./components/MapLayer.tsx";
-import {useMapStore} from "./store/useMapStore.ts";
 import {LAYER_CONFIGS} from "./models/layers.ts";
+import {FeatureDetails} from "./components/FeatureDetails.tsx";
+import {Notifications} from "@mantine/notifications";
+import {FeatureFormModal} from "./components/FeatureFormModal.tsx";
 
 function App() {
-    const {mode, setMode} = useMapStore();
 
     return (
         <div style={{height: '100vh', width: '100vw'}}>
@@ -38,12 +39,13 @@ function App() {
                         layerConfig={layer}
                     />
                 ))}
-                <MapController
-                    mode={mode}
-                />
+                <MapController/>
             </MapContainer>
-            <CreationMenu setMode={setMode}/>
+            <CreationMenu/>
             <LayerTree/>
+            <Notifications/>
+            <FeatureDetails/>
+            <FeatureFormModal/>
         </div>
     );
 }

@@ -7,3 +7,8 @@ export const fetchLayerData = async (endpoint: string, bbox: BoundingBoxParams) 
     console.log("Resp: " + response.data);
     return response.data;
 };
+
+export const createNode = async ( payload: any) => {
+    const response = await api.post('/nodes', payload);
+    return response.data;
+}
