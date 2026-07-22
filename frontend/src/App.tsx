@@ -7,8 +7,7 @@ import {CreationMenu} from "./components/CreationMenu.tsx";
 import {MapLayer} from "./components/MapLayer.tsx";
 import {LAYER_CONFIGS} from "./models/layers.ts";
 import {FeatureDetails} from "./components/FeatureDetails.tsx";
-import {Notifications} from "@mantine/notifications";
-import {FeatureFormModal} from "./components/FeatureFormModal.tsx";
+import ModalContainer from "./common/modals/ModalContainer.tsx";
 
 function App() {
 
@@ -43,9 +42,8 @@ function App() {
             </MapContainer>
             <CreationMenu/>
             <LayerTree/>
-            <Notifications/>
             <FeatureDetails/>
-            <FeatureFormModal/>
+            <ModalContainer/>
         </div>
     );
 }

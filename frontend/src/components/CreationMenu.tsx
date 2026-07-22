@@ -1,6 +1,6 @@
 import {ActionIcon, Menu, Tooltip as MantineTooltip} from "@mantine/core";
 import {IconPlus, IconPoint, IconPolygon, IconRoute} from "@tabler/icons-react";
-import {useMapStore} from "../store/useMapStore.ts";
+import {useMapStore} from "../stores/useMapStore.ts";
 
 export const CreationMenu = () => {
     const {setMode} = useMapStore();

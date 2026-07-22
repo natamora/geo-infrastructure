@@ -1,4 +1,4 @@
-import {IconCircleFilled, IconHome2Filled, type IconProps} from "@tabler/icons-react";
+import {IconCircleFilled, IconHomeFilled, type IconProps} from "@tabler/icons-react";
 import L from "leaflet";
 import {renderToStaticMarkup} from "react-dom/server";
 import type {IconType} from "../models/layers.ts";
@@ -6,7 +6,7 @@ import type {IconType} from "../models/layers.ts";
 const iconCache: Record<string, L.DivIcon> = {};
 
 const ICON_MAP: Record<IconType, React.FC<IconProps>> = {
-    HOME: IconHome2Filled,
+    HOME: IconHomeFilled,
     CIRCLE: IconCircleFilled,
 };
 

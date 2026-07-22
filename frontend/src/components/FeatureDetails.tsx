@@ -1,12 +1,10 @@
-// src/components/FeatureDetails.tsx
 import {CloseButton, Divider, Group, Paper, Stack, Text, Title} from '@mantine/core';
-import {useMapStore} from "../store/useMapStore";
+import {useMapStore} from "../stores/useMapStore";
 
 export const FeatureDetails = () => {
     const {mode, selectedFeature, selectFeature} = useMapStore();
     console.log("Dane w panelu: ", selectedFeature);
     if (!selectedFeature || mode !== 'IDLE') return null;
-    console.log("Dane w panelu2: ", selectedFeature);
 
     const properties = selectedFeature.properties || {};
 

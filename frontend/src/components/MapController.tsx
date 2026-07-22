@@ -1,20 +1,21 @@
 import {useMap, useMapEvents} from "react-leaflet";
 import {useEffect} from "react";
-import {useMapStore} from "../store/useMapStore.ts";
+import {useMapStore} from "../stores/useMapStore.ts";
 import {notifications} from '@mantine/notifications';
 
 import '@geoman-io/leaflet-geoman-free';
 import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
 import {getOrCreateIcon} from "../utils/mapIcons.tsx";
+import {useModalStore} from "../stores/useModalStore.ts";
+import {FeatureForm} from "./FeatureForm.tsx";
 
 
 export const MapController = () => {
     const map = useMap();
-    const {setDrawingStartedFromNode, mode, setBBox, selectFeature, setPendingFeature, setMode} = useMapStore();
+    const {setDrawingStartedFromNode, mode, setBBox, selectFeature, setMode} = useMapStore();
 
 
     useEffect(() => {
-        // Ta funkcja wyłapie absolutnie każde zdarzenie Leafleta na mapie
         const debugListener = (e: any) => {
             console.log(`🗺️ [Leaflet Event]: ${e.type}`, e);
         };
@@ -83,12 +84,23 @@ export const MapController = () => {
                 color: 'green',
                 position: 'bottom-center',
             });
-            // setPendingFeature(geoJson);
             selectFeature(null);
             setMode('IDLE');
             layer.remove();
-            useMapStore.getState().openFeatureModal(geoJson);
 
+            const rawGeometry = geoJson?.geometry;
+            if (!rawGeometry) {
+                console.error("Error: Could not retrieve geometry!", geoJson);
+                notifications.show({
+                    title: 'Error',
+                    message: 'Failed to retrieve shape geometry. Please try again.',
+                    color: 'red',
+                    position: 'bottom-center',
+                });
+                layer.remove();
+                return;
+            }
+            useModalStore.getState().openModal(<FeatureForm geometry={rawGeometry}/>, "Add");
         };
 
         map.on('pm:create', handleDrawCreate);
@@ -96,7 +108,7 @@ export const MapController = () => {
         return () => {
             map.off('pm:create', handleDrawCreate);
         };
-    }, [map, setPendingFeature, setMode]);
+    }, [map, setMode]);
 
     useEffect(() => {
         map.pm.disableDraw();

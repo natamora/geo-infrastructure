@@ -1,7 +1,7 @@
 import {GeoJSON, useMap} from "react-leaflet"
 import type {LayerConfig} from "../models/layers.ts";
 import {useLayerData} from "../hooks/useLayerData.ts";
-import {useMapStore} from "../store/useMapStore.ts";
+import {useMapStore} from "../stores/useMapStore.ts";
 import L from "leaflet";
 import {getOrCreateIcon} from "../utils/mapIcons.tsx";
 

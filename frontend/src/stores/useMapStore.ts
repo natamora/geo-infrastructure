@@ -10,15 +10,9 @@ interface MapState {
     setMode: (mode: MapState['mode']) => void;
     bbox: { minX: number, minY: number, maxX: number, maxY: number } | null;
     setBBox: (bbox: any) => void;
-    pendingFeature: any | null;
-    setPendingFeature: (feature: any | null) => void;
+
     isDrawingStartedFromNode: boolean;
     setDrawingStartedFromNode: (val: boolean) => void;
-
-    isFeatureModalOpen: boolean;
-    openFeatureModal: (geometry: any) => void;
-    closeFeatureModal: () => void;
-
 }
 
 export const useMapStore = create<MapState>((set, get) => ({
@@ -33,7 +27,7 @@ export const useMapStore = create<MapState>((set, get) => ({
         console.log("Selecting feature: " + feature);
     },
     setMode: (mode) => {
-        set({mode, pendingFeature: null})
+        set({mode})
         console.log("Seting mode: " + mode);
     },
     toggleLayer: (id) => set((state) => ({
@@ -44,19 +38,7 @@ export const useMapStore = create<MapState>((set, get) => ({
     })),
     bbox: null,
     setBBox: (bbox) => set({bbox}),
-    pendingFeature: null,
-    setPendingFeature: (feature) => set({pendingFeature: feature}),
+
     isDrawingStartedFromNode: false,
     setDrawingStartedFromNode: (val: boolean) => set({ isDrawingStartedFromNode: val }),
-
-    isFeatureModalOpen: false,
-    openFeatureModal: (geometry) => set({
-        isFeatureModalOpen: true,
-        pendingFeature: geometry
-    }),
-
-    closeFeatureModal: () => set({
-        isFeatureModalOpen: false,
-        pendingFeature: null
-    }),
 }));
