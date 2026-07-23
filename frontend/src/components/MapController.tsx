@@ -100,7 +100,13 @@ export const MapController = () => {
                 layer.remove();
                 return;
             }
-            useModalStore.getState().openModal(<FeatureForm geometry={rawGeometry}/>, "Add");
+            useModalStore.getState().openModal(
+                <FeatureForm
+                    geometry={rawGeometry}
+                    onClose={() => useModalStore.getState().closeModal()}
+                />,
+                "Add new node"
+            );
         };
 
         map.on('pm:create', handleDrawCreate);

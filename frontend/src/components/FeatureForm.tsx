@@ -3,26 +3,27 @@ import {DatePickerInput} from '@mantine/dates';
 import {useForm} from '@mantine/form';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {notifications} from '@mantine/notifications';
-import {createNode} from '../services/mapService';
 
 import '@mantine/dates/styles.css';
-import {useModalStore} from "../stores/useModalStore.ts";
-import {type JSX} from "react"; // Wymagane style dla komponentów daty
+import {type JSX} from "react";
+import {nodeTypeOptions} from "../common/options/nodeTypeOptions.ts";
+import {lifecycleStatusOptions} from "../common/options/lifecycleStatusOptions.ts";
+import {Nodes} from "../api/apiClient.ts";
 
 interface FeatureFormProps {
     geometry: any;
+    onClose?: () => void;
 }
 
-export function FeatureForm({geometry}: FeatureFormProps): JSX.Element {
-    const {closeModal} = useModalStore();
+export function FeatureForm({geometry, onClose}: FeatureFormProps): JSX.Element {
     const queryClient = useQueryClient();
 
     const form = useForm({
         initialValues: {
             name: '',
             type: 'BUILDING',
-            status: 'PLANNED',
-            installationDate: null as Date | null, // Przechowujemy obiekt Date lub null
+            status: 'ACTIVE',
+            installationDate: null as Date | null,
         },
     });
 
@@ -47,7 +48,7 @@ export function FeatureForm({geometry}: FeatureFormProps): JSX.Element {
                 shape: geometry,
             };
 
-            return await createNode(payload);
+            return Nodes.create(payload);
         },
         onSuccess: () => {
             notifications.show({
@@ -58,8 +59,7 @@ export function FeatureForm({geometry}: FeatureFormProps): JSX.Element {
             });
 
             void queryClient.invalidateQueries({queryKey: ['layer']});
-            closeModal();
-            form.reset();
+            onClose?.();
         },
         onError: (error: any) => {
             notifications.show({
@@ -87,12 +87,7 @@ export function FeatureForm({geometry}: FeatureFormProps): JSX.Element {
 
             <Select
                 label="Type"
-                data={[
-                    {value: 'POLE', label: 'Pole'},
-                    {value: 'MANHOLE', label: 'Manhole'},
-                    {value: 'CABINET', label: 'Cabinet'},
-                    {value: 'BUILDING', label: 'Building'},
-                ]}
+                data={nodeTypeOptions}
                 comboboxProps={{
                     zIndex: 100001,
                     withinPortal: true
@@ -103,12 +98,7 @@ export function FeatureForm({geometry}: FeatureFormProps): JSX.Element {
 
             <Select
                 label="Lifecycle state"
-                data={[
-                    {value: 'PLANNED', label: 'Planned'},
-                    {value: 'ACTIVE', label: 'Active'},
-                    {value: 'MAINTENANCE', label: 'Maintenance'},
-                    {value: 'DECOMMISSIONED', label: 'Decommissioned'},
-                ]}
+                data={lifecycleStatusOptions}
                 mb="md"
                 comboboxProps={{
                     zIndex: 100001,
@@ -128,7 +118,7 @@ export function FeatureForm({geometry}: FeatureFormProps): JSX.Element {
             />
 
             <Group justify="flex-end">
-                <Button variant="default" onClick={closeModal}>
+                <Button variant="default" onClick={onClose}>
                     Cancel
                 </Button>
                 <Button type="submit" loading={mutation.isPending}>
