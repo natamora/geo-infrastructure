@@ -8,7 +8,7 @@ import org.wololo.geojson.Point;
 
 import java.time.LocalDate;
 
-public record NodeDto(
+public record NodeRequestDto(
         @NotBlank(message = "Name is required")
         String name,
 

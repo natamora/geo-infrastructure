@@ -5,9 +5,10 @@ import {notifications} from '@mantine/notifications';
 
 import '@geoman-io/leaflet-geoman-free';
 import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
-import {getOrCreateIcon} from "../utils/mapIcons.tsx";
+import {getOrCreateIcon} from "../utils/icons/mapIcons.tsx";
 import {useModalStore} from "../stores/useModalStore.ts";
 import {FeatureForm} from "./FeatureForm.tsx";
+import type {NodeFormValues} from "../models/nodes.ts";
 
 
 export const MapController = () => {
@@ -100,8 +101,15 @@ export const MapController = () => {
                 layer.remove();
                 return;
             }
+            const emptyInitialValues: NodeFormValues = {
+                name: '',
+                type: 'BUILDING',
+                status: 'ACTIVE', // Domyślny status
+                installationDate: null,
+            };
             useModalStore.getState().openModal(
                 <FeatureForm
+                    initialValues={emptyInitialValues}
                     geometry={rawGeometry}
                     onClose={() => useModalStore.getState().closeModal()}
                 />,

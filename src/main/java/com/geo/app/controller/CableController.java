@@ -35,7 +35,8 @@ public class CableController {
         Cable updated = cableService.updateCable(id, dto);
         return ResponseEntity.ok(updated.getId());
     }
-
+// string templates
+    // switch expressions
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCable(@PathVariable Long id) {
         cableService.deleteCable(id);

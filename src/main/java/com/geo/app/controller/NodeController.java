@@ -2,7 +2,8 @@ package com.geo.app.controller;
 
 import com.geo.app.domain.entity.Node;
 import com.geo.app.dto.BoundingBox;
-import com.geo.app.dto.nodes.NodeDto;
+import com.geo.app.dto.nodes.NodeRequestDto;
+import com.geo.app.dto.nodes.NodeResponseDto;
 import com.geo.app.geojson.FeatureCollectionDto;
 import com.geo.app.service.NodeService;
 import jakarta.validation.Valid;
@@ -24,16 +25,22 @@ public class NodeController {
         return nodeService.getNodes(bbox);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<NodeResponseDto> getNodeById(@PathVariable Long id) {
+        NodeResponseDto responseDto = nodeService.getNodeById(id);
+        return ResponseEntity.ok(responseDto);
+    }
+
     @PostMapping
-    public ResponseEntity<Long> createNode(@RequestBody @Valid NodeDto nodeDto) {
+    public ResponseEntity<NodeResponseDto> createNode(@RequestBody @Valid NodeRequestDto nodeDto) {
         var savedNode = nodeService.createNode(nodeDto);
-        return ResponseEntity.ok(savedNode.getId());
+        return ResponseEntity.ok(savedNode);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Long> updateNode(@PathVariable Long id, @Valid @RequestBody NodeDto dto) {
-        Node updated = nodeService.updateNode(id, dto);
-        return ResponseEntity.ok(updated.getId());
+    public ResponseEntity<NodeResponseDto> updateNode(@PathVariable Long id, @Valid @RequestBody NodeRequestDto dto) {
+        var updated = nodeService.updateNode(id, dto);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")

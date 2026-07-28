@@ -1,79 +1,54 @@
 import {Button, Group, Select, TextInput} from '@mantine/core';
 import {DatePickerInput} from '@mantine/dates';
 import {useForm} from '@mantine/form';
-import {useMutation, useQueryClient} from '@tanstack/react-query';
-import {notifications} from '@mantine/notifications';
 
 import '@mantine/dates/styles.css';
 import {type JSX} from "react";
 import {nodeTypeOptions} from "../common/options/nodeTypeOptions.ts";
 import {lifecycleStatusOptions} from "../common/options/lifecycleStatusOptions.ts";
-import {Nodes} from "../api/apiClient.ts";
+import type {NodeFormValues} from "../models/nodes.ts";
+import {mapNodeFormToPayload} from "../utils/mappers/nodeMapper.ts";
+import {useCreateNode, useUpdateNode} from "../hooks/useNodes.ts";
 
 interface FeatureFormProps {
+    initialValues: NodeFormValues;
     geometry: any;
     onClose?: () => void;
 }
 
-export function FeatureForm({geometry, onClose}: FeatureFormProps): JSX.Element {
-    const queryClient = useQueryClient();
+export function FeatureForm({initialValues, geometry, onClose}: FeatureFormProps): JSX.Element {
 
-    const form = useForm({
-        initialValues: {
-            name: '',
-            type: 'BUILDING',
-            status: 'ACTIVE',
-            installationDate: null as Date | null,
-        },
+    const form = useForm<NodeFormValues>({
+        initialValues
     });
 
-    const mutation = useMutation({
-        mutationFn: async (formValues: any) => {
-
-            // Konwertujemy obiekt Date z Mantine na format 'YYYY-MM-DD' oczekiwany przez LocalDate w Javie
-            let formattedDate = null;
-            if (formValues.installationDate) {
-                const d = new Date(formValues.installationDate);
-                const year = d.getFullYear();
-                const month = String(d.getMonth() + 1).padStart(2, '0');
-                const day = String(d.getDate()).padStart(2, '0');
-                formattedDate = `${year}-${month}-${day}`;
-            }
-
-            const payload = {
-                name: formValues.name,
-                type: formValues.type,
-                status: formValues.status,
-                installationDate: formattedDate,
-                shape: geometry,
-            };
-
-            return Nodes.create(payload);
-        },
-        onSuccess: () => {
-            notifications.show({
-                title: 'Success',
-                message: 'Node was created succesfully!',
-                color: 'green',
-                position: 'bottom-center',
-            });
-
-            void queryClient.invalidateQueries({queryKey: ['layer']});
-            onClose?.();
-        },
-        onError: (error: any) => {
-            notifications.show({
-                title: 'Error',
-                message: error.response?.data?.message || 'Node save failed.',
-                color: 'red',
-                position: 'bottom-center',
-            });
-        },
-    });
+    const createNode = useCreateNode();
+    const updateNode = useUpdateNode();
 
     const handleSubmit = form.onSubmit((values) => {
-        mutation.mutate(values);
+        const payload = mapNodeFormToPayload(values, geometry);
+        if (initialValues.id) {
+            updateNode.mutate(
+                {id: initialValues.id, payload: payload},
+                {
+                    onSuccess: () => {
+                        onClose?.();
+                    }
+                }
+            );
+        } else {
+            createNode.mutate(
+                payload,
+                {
+                    onSuccess: () => {
+                        onClose?.();
+                    }
+                }
+            );
+        }
     });
+
+    const isPending = createNode.isPending || updateNode.isPending;
 
     return (
         <form onSubmit={handleSubmit}>
@@ -121,7 +96,7 @@ export function FeatureForm({geometry, onClose}: FeatureFormProps): JSX.Element 
                 <Button variant="default" onClick={onClose}>
                     Cancel
                 </Button>
-                <Button type="submit" loading={mutation.isPending}>
+                <Button type="submit" loading={isPending}>
                     Save
                 </Button>
             </Group>

@@ -2,18 +2,17 @@ package com.geo.app.service;
 
 import com.geo.app.domain.entity.Node;
 import com.geo.app.dto.BoundingBox;
-import com.geo.app.dto.nodes.NodeDto;
+import com.geo.app.dto.nodes.NodeRequestDto;
+import com.geo.app.dto.nodes.NodeResponseDto;
 import com.geo.app.geojson.FeatureCollectionDto;
 import com.geo.app.geojson.GeoJsonMapper;
+import com.geo.app.mapper.NodeMapper;
 import com.geo.app.repository.CableRepository;
 import com.geo.app.repository.NodeRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.locationtech.jts.geom.LineString;
-import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.wololo.jts2geojson.GeoJSONReader;
 
 @Service
 @RequiredArgsConstructor
@@ -22,62 +21,49 @@ public class NodeService {
     private final CableRepository cableRepository;
 
     private final GeoJsonMapper mapper;
+    private final NodeMapper nodeMapper;
 
     public FeatureCollectionDto getNodes(BoundingBox bbox) {
-        var entities = bbox.toGeometry()
-                .map(nodeRepository::findByBBox)
-                .orElseGet(nodeRepository::findAll);
+        var entities = bbox.toGeometry().map(nodeRepository::findByBBox).orElseGet(nodeRepository::findAll);
 
-        var features = entities.stream()
-                .map(mapper::toFeatureDto)
-                .toList();
+        var features = entities.stream().map(mapper::toFeatureDto).toList();
 
         return new FeatureCollectionDto(features);
+    }
+
+    public NodeResponseDto getNodeById(Long id) {
+        Node node = nodeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Node not found with id: " + id));
+
+        return nodeMapper.toResponseDto(node);
     }
 
     public FeatureCollectionDto getNodesInZone(Long zoneId) {
 
-        var features = nodeRepository.findNodesInZone(zoneId).stream()
-                .map(mapper::toFeatureDto)
-                .toList();
+        var features = nodeRepository.findNodesInZone(zoneId).stream().map(mapper::toFeatureDto).toList();
 
         return new FeatureCollectionDto(features);
     }
 
     @Transactional
-    public Node createNode(NodeDto dto) {
-        GeoJSONReader reader = new GeoJSONReader();
-        Point point = (Point) reader.read(dto.shape());
-        point.setSRID(4326);
+    public NodeResponseDto createNode(NodeRequestDto dto) {
 
-        Node node = new Node();
-        node.setName(dto.name());
-        node.setType(dto.type());
-        node.setStatus(dto.status());
-        node.setInstallationDate(dto.installationDate());
-        node.setShape(point);
+        Node node = nodeMapper.toEntity(dto);
+        Node saved = nodeRepository.save(node);
 
-        return nodeRepository.save(node);
+        return nodeMapper.toResponseDto(saved);
     }
 
     @Transactional
-    public Node updateNode(Long id, NodeDto dto) {
+    public NodeResponseDto updateNode(Long id, NodeRequestDto dto) {
         // TODO: check if u can update geometry if cables connected
 
-        Node node = nodeRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Node not found with id: " + id));
+        Node node = nodeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Node not found with id: " + id));
 
-        node.setName(dto.name());
-        node.setType(dto.type());
-        node.setStatus(dto.status());
-        node.setInstallationDate(dto.installationDate());
+        nodeMapper.updateEntityFromDto(node, dto);
+        Node updated = nodeRepository.save(node);
 
-        GeoJSONReader reader = new GeoJSONReader();
-        Point shape = (Point) reader.read(dto.shape());
-        shape.setSRID(4326);
-        node.setShape(shape);
-
-        return nodeRepository.save(node);
+        return nodeMapper.toResponseDto(updated);
     }
 
     @Transactional
