@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import org.wololo.geojson.Polygon;
 
 
-public record ZoneDto(
+public record ZoneRequestDto(
         @NotBlank(message = "Name is required")
         String name,
 

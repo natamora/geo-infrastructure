@@ -11,6 +11,11 @@ interface MapState {
     bbox: { minX: number, minY: number, maxX: number, maxY: number } | null;
     setBBox: (bbox: any) => void;
 
+    startNodeId: number | null;
+    endNodeId: number | null;
+    setStartNodeId: (id: number) => void;
+    setEndNodeId: (id: number) => void;
+
     isDrawingStartedFromNode: boolean;
     setDrawingStartedFromNode: (val: boolean) => void;
 }
@@ -38,6 +43,11 @@ export const useMapStore = create<MapState>((set, get) => ({
     })),
     bbox: null,
     setBBox: (bbox) => set({bbox}),
+
+    startNodeId: null,
+    endNodeId: null,
+    setStartNodeId: (id: number) => set({startNodeId: id}),
+    setEndNodeId: (id: number) => set({endNodeId: id}),
 
     isDrawingStartedFromNode: false,
     setDrawingStartedFromNode: (val: boolean) => set({ isDrawingStartedFromNode: val }),

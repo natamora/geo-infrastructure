@@ -24,6 +24,7 @@ public class NodeMapper {
         node.setStatus(dto.status());
         node.setInstallationDate(dto.installationDate());
         node.setShape(point);
+
         return node;
     }
 

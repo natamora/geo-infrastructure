@@ -1,10 +1,9 @@
 package com.geo.app.controller;
 
-import com.geo.app.domain.entity.Zone;
 import com.geo.app.dto.BoundingBox;
-import com.geo.app.dto.zones.ZoneDto;
+import com.geo.app.dto.zones.ZoneRequestDto;
+import com.geo.app.dto.zones.ZoneResponseDto;
 import com.geo.app.geojson.FeatureCollectionDto;
-import com.geo.app.geojson.FeatureDto;
 import com.geo.app.service.NodeService;
 import com.geo.app.service.ZoneService;
 import jakarta.validation.Valid;
@@ -28,8 +27,9 @@ public class ZoneController {
     }
 
     @GetMapping("/{id}")
-    public FeatureDto getZoneById(@PathVariable Long id) {
-        return zoneService.getZoneById(id);
+    public ResponseEntity<ZoneResponseDto> getZoneById(@PathVariable Long id) {
+        ZoneResponseDto responseDto = zoneService.getZoneById(id);
+        return ResponseEntity.ok(responseDto);
     }
 
     @GetMapping("/{id}/nodes")
@@ -38,15 +38,15 @@ public class ZoneController {
     }
 
     @PostMapping
-    public ResponseEntity<Long> createZone(@RequestBody @Valid ZoneDto createZoneDto) {
+    public ResponseEntity<ZoneResponseDto> createZone(@RequestBody @Valid ZoneRequestDto createZoneDto) {
         var savedZone = zoneService.createZone(createZoneDto);
-        return ResponseEntity.ok(savedZone.getId());
+        return ResponseEntity.ok(savedZone);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Long> updateZone(@PathVariable Long id, @Valid @RequestBody ZoneDto dto) {
-        Zone updated = zoneService.updateZone(id, dto);
-        return ResponseEntity.ok(updated.getId());
+    public ResponseEntity<ZoneResponseDto> updateZone(@PathVariable Long id, @Valid @RequestBody ZoneRequestDto dto) {
+        var updatedZone = zoneService.updateZone(id, dto);
+        return ResponseEntity.ok(updatedZone);
     }
 
     @DeleteMapping("/{id}")

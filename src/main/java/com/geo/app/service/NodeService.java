@@ -24,7 +24,9 @@ public class NodeService {
     private final NodeMapper nodeMapper;
 
     public FeatureCollectionDto getNodes(BoundingBox bbox) {
-        var entities = bbox.toGeometry().map(nodeRepository::findByBBox).orElseGet(nodeRepository::findAll);
+        var entities = bbox.toGeometry()
+                .map(nodeRepository::findByBBox)
+                .orElseGet(nodeRepository::findAll);
 
         var features = entities.stream().map(mapper::toFeatureDto).toList();
 
@@ -32,16 +34,14 @@ public class NodeService {
     }
 
     public NodeResponseDto getNodeById(Long id) {
-        Node node = nodeRepository.findById(id)
+        return nodeRepository.findById(id)
+                .map(nodeMapper::toResponseDto)
                 .orElseThrow(() -> new EntityNotFoundException("Node not found with id: " + id));
-
-        return nodeMapper.toResponseDto(node);
     }
 
     public FeatureCollectionDto getNodesInZone(Long zoneId) {
 
         var features = nodeRepository.findNodesInZone(zoneId).stream().map(mapper::toFeatureDto).toList();
-
         return new FeatureCollectionDto(features);
     }
 
@@ -49,21 +49,22 @@ public class NodeService {
     public NodeResponseDto createNode(NodeRequestDto dto) {
 
         Node node = nodeMapper.toEntity(dto);
-        Node saved = nodeRepository.save(node);
+        Node savedNode = nodeRepository.save(node);
 
-        return nodeMapper.toResponseDto(saved);
+        return nodeMapper.toResponseDto(savedNode);
     }
 
     @Transactional
     public NodeResponseDto updateNode(Long id, NodeRequestDto dto) {
         // TODO: check if u can update geometry if cables connected
 
-        Node node = nodeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Node not found with id: " + id));
+        Node node = nodeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Node not found with id: " + id));
 
         nodeMapper.updateEntityFromDto(node, dto);
-        Node updated = nodeRepository.save(node);
+        Node updatedNode = nodeRepository.save(node);
 
-        return nodeMapper.toResponseDto(updated);
+        return nodeMapper.toResponseDto(updatedNode);
     }
 
     @Transactional

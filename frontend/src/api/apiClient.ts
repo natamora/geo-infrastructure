@@ -3,6 +3,8 @@ import type {BoundingBoxParams} from "../models/boundingBoxParams.ts";
 import {notifications} from "@mantine/notifications";
 import type {NodeRequest, NodeResponse} from "../models/nodes.ts";
 import type {FeatureCollection} from "geojson";
+import type {CableRequest, CableResponse} from "../models/cables.ts";
+import type {ZoneRequest, ZoneResponse} from "../models/zones.ts";
 
 const api = axios.create({
     baseURL: 'http://localhost:8080/api',
@@ -66,14 +68,16 @@ export const Nodes = {
 }
 
 export const Cables = {
-    create: (payload: any) => requests.post<void>('/cables', payload),
-    update: (id: number, payload: any) => requests.put<number>(`/cables/${id}`, payload),
+    getById: (id: number) => requests.get<CableResponse>(`/cables/${id}`),
+    create: (payload: CableRequest) => requests.post<CableResponse>('/cables', payload),
+    update: (id: number, payload: CableRequest) => requests.put<CableResponse>(`/cables/${id}`, payload),
     delete: (id: number) => requests.delete<void>(`/cables/${id}`),
 }
 
 export const Zones = {
-    create: (payload: any) => requests.post<void>('/zones', payload),
-    update: (id: number, payload: any) => requests.put<number>(`/zones/${id}`, payload),
+    getById: (id: number) => requests.get<ZoneResponse>(`/zones/${id}`),
+    create: (payload: ZoneRequest) => requests.post<ZoneResponse>('/zones', payload),
+    update: (id: number, payload: ZoneRequest) => requests.put<ZoneResponse>(`/zones/${id}`, payload),
     delete: (id: number) => requests.delete<void>(`/zones/${id}`),
 }
 

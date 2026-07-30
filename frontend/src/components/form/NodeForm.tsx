@@ -4,19 +4,19 @@ import {useForm} from '@mantine/form';
 
 import '@mantine/dates/styles.css';
 import {type JSX} from "react";
-import {nodeTypeOptions} from "../common/options/nodeTypeOptions.ts";
-import {lifecycleStatusOptions} from "../common/options/lifecycleStatusOptions.ts";
-import type {NodeFormValues} from "../models/nodes.ts";
-import {mapNodeFormToPayload} from "../utils/mappers/nodeMapper.ts";
-import {useCreateNode, useUpdateNode} from "../hooks/useNodes.ts";
+import {nodeTypeOptions} from "../../common/options/nodeTypeOptions.ts";
+import {lifecycleStatusOptions} from "../../common/options/lifecycleStatusOptions.ts";
+import type {NodeFormValues} from "../../models/nodes.ts";
+import {mapNodeFormToPayload} from "../../utils/mappers/nodeMapper.ts";
+import {useCreateNode, useUpdateNode} from "../../hooks/useNodes.ts";
 
-interface FeatureFormProps {
+interface NodeFormProps {
     initialValues: NodeFormValues;
     geometry: any;
     onClose?: () => void;
 }
 
-export function FeatureForm({initialValues, geometry, onClose}: FeatureFormProps): JSX.Element {
+export function NodeForm({initialValues, geometry, onClose}: NodeFormProps): JSX.Element {
 
     const form = useForm<NodeFormValues>({
         initialValues

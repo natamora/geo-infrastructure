@@ -7,8 +7,12 @@ import '@geoman-io/leaflet-geoman-free';
 import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
 import {getOrCreateIcon} from "../utils/icons/mapIcons.tsx";
 import {useModalStore} from "../stores/useModalStore.ts";
-import {FeatureForm} from "./FeatureForm.tsx";
+import {NodeForm} from "./form/NodeForm.tsx";
 import type {NodeFormValues} from "../models/nodes.ts";
+import type {CableFormValues} from "../models/cables.ts";
+import {CableForm} from "./form/CableForm.tsx";
+import type {ZoneFormValues} from "../models/zones.ts";
+import {ZoneForm} from "./form/ZoneForm.tsx";
 
 
 export const MapController = () => {
@@ -85,9 +89,9 @@ export const MapController = () => {
                 color: 'green',
                 position: 'bottom-center',
             });
-            selectFeature(null);
-            setMode('IDLE');
-            layer.remove();
+            // selectFeature(null);
+            // setMode('IDLE');
+            // layer.remove();
 
             const rawGeometry = geoJson?.geometry;
             if (!rawGeometry) {
@@ -101,20 +105,57 @@ export const MapController = () => {
                 layer.remove();
                 return;
             }
-            const emptyInitialValues: NodeFormValues = {
-                name: '',
-                type: 'BUILDING',
-                status: 'ACTIVE', // Domyślny status
-                installationDate: null,
-            };
-            useModalStore.getState().openModal(
-                <FeatureForm
-                    initialValues={emptyInitialValues}
-                    geometry={rawGeometry}
-                    onClose={() => useModalStore.getState().closeModal()}
-                />,
-                "Add new node"
-            );
+            let currentMode = useMapStore.getState().mode;
+            if (currentMode === 'DRAW_POINT') {
+                const emptyInitialValues: NodeFormValues = {
+                    name: '',
+                    type: 'BUILDING',
+                    status: 'ACTIVE', // Domyślny status
+                    installationDate: null,
+                };
+                useModalStore.getState().openModal(
+                    <NodeForm
+                        initialValues={emptyInitialValues}
+                        geometry={rawGeometry}
+                        onClose={() => useModalStore.getState().closeModal()}
+                    />,
+                    "Add new node"
+                );
+            } else if (currentMode === 'DRAW_CABLE') {
+                const emptyCableValues: CableFormValues = {
+                    name: '',
+                    type: 'FIBER',
+                    status: 'ACTIVE',
+                    installationDate: null,
+                    startNodeId: useMapStore.getState().startNodeId || null,
+                    endNodeId: null,
+                };
+                useModalStore.getState().openModal(
+                    <CableForm
+                        initialValues={emptyCableValues}
+                        geometry={rawGeometry}
+                        onClose={() => useModalStore.getState().closeModal()}
+                    />,
+                    "Add new cable"
+                );
+            } else if (currentMode === 'DRAW_ZONE') {
+                const emptyZoneValues: ZoneFormValues = {
+                    name: '',
+                    zoneClass: 'INDUSTRIAL',
+                    status: 'ACTIVE',
+                };
+                useModalStore.getState().openModal(
+                    <ZoneForm
+                        initialValues={emptyZoneValues}
+                        geometry={rawGeometry}
+                        onClose={() => useModalStore.getState().closeModal()}
+                    />,
+                    "Add new zone"
+                );
+            }
+            selectFeature(null);
+            setMode('IDLE');
+            layer.remove();
         };
 
         map.on('pm:create', handleDrawCreate);

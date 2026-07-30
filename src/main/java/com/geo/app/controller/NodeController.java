@@ -1,6 +1,5 @@
 package com.geo.app.controller;
 
-import com.geo.app.domain.entity.Node;
 import com.geo.app.dto.BoundingBox;
 import com.geo.app.dto.nodes.NodeRequestDto;
 import com.geo.app.dto.nodes.NodeResponseDto;
@@ -39,8 +38,8 @@ public class NodeController {
 
     @PutMapping("/{id}")
     public ResponseEntity<NodeResponseDto> updateNode(@PathVariable Long id, @Valid @RequestBody NodeRequestDto dto) {
-        var updated = nodeService.updateNode(id, dto);
-        return ResponseEntity.ok(updated);
+        var updatedNode = nodeService.updateNode(id, dto);
+        return ResponseEntity.ok(updatedNode);
     }
 
     @DeleteMapping("/{id}")

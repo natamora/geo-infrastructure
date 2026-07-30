@@ -8,15 +8,10 @@ import java.time.LocalDate;
 
 public record NodeResponseDto(
         Long id,
-
         String name,
-
         NodeType type,
-
         LifeCycleStatus status,
-
         LocalDate installationDate,
-
         Point shape
 ) {
 }

@@ -40,6 +40,7 @@ export const MapLayer = ({layerConfig, pane}: MapLayerProps) => {
                     const isPointLayer = feature.geometry?.type === 'Point';
                     if (isPointLayer) {
                         useMapStore.getState().setDrawingStartedFromNode(true);
+                        useMapStore.getState().setStartNodeId(feature.properties.id);
                         console.log("layer-click: Kliknięto w węzeł startowy");
                     }
                     map.fire('click', e);

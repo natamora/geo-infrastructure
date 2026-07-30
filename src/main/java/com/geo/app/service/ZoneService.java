@@ -2,11 +2,13 @@ package com.geo.app.service;
 
 import com.geo.app.domain.entity.Zone;
 import com.geo.app.dto.BoundingBox;
-import com.geo.app.dto.zones.ZoneDto;
+import com.geo.app.dto.zones.ZoneRequestDto;
+import com.geo.app.dto.zones.ZoneResponseDto;
 import com.geo.app.exception.ResourceNotFoundException;
 import com.geo.app.geojson.FeatureCollectionDto;
 import com.geo.app.geojson.FeatureDto;
 import com.geo.app.geojson.GeoJsonMapper;
+import com.geo.app.mapper.ZoneMapper;
 import com.geo.app.repository.ZoneRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -21,48 +23,42 @@ public class ZoneService {
     private final ZoneRepository zoneRepository;
     private final GeoJsonMapper mapper;
 
+    private final ZoneMapper zoneMapper;
+
     public FeatureCollectionDto getZones(BoundingBox bbox) {
-        var entities = bbox.toGeometry().map(zoneRepository::findByBBox).orElseGet(zoneRepository::findAll);
+        var entities = bbox.toGeometry()
+                .map(zoneRepository::findByBBox)
+                .orElseGet(zoneRepository::findAll);
 
         var features = entities.stream().map(mapper::toFeatureDto).toList();
 
         return new FeatureCollectionDto(features);
     }
 
-    public FeatureDto getZoneById(Long id) {
-        return zoneRepository.findById(id).map(mapper::toFeatureDto).orElseThrow(() -> new ResourceNotFoundException("Zone with ID " + id + " not found"));
+    public ZoneResponseDto getZoneById(Long id) {
+        return zoneRepository.findById(id)
+                .map(zoneMapper::toResponseDto)
+                .orElseThrow(() -> new ResourceNotFoundException("Zone with ID " + id + " not found"));
     }
 
     @Transactional
-    public Zone createZone(ZoneDto dto) {
-        GeoJSONReader reader = new GeoJSONReader();
-        Polygon shape = (Polygon) reader.read(dto.shape());
-        shape.setSRID(4326);
+    public ZoneResponseDto createZone(ZoneRequestDto dto) {
 
-        Zone zone = new Zone();
-        zone.setName(dto.name());
-        zone.setZoneClass(dto.zoneClass());
-        zone.setStatus(dto.status());
-        zone.setShape(shape);
+        Zone zone = zoneMapper.toEntity(dto);
+        Zone savedZone = zoneRepository.save(zone);
 
-        return zoneRepository.save(zone);
+        return zoneMapper.toResponseDto(savedZone);
     }
 
     @Transactional
-    public Zone updateZone(Long id, ZoneDto dto) {
+    public ZoneResponseDto updateZone(Long id, ZoneRequestDto dto) {
 
         Zone zone = zoneRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Zone not found with id: " + id));
 
-        zone.setName(dto.name());
-        zone.setZoneClass(dto.zoneClass());
-        zone.setStatus(dto.status());
+        zoneMapper.updateEntityFromDto(zone, dto);
+        Zone updatedZone = zoneRepository.save(zone);
 
-        GeoJSONReader reader = new GeoJSONReader();
-        Polygon shape = (Polygon) reader.read(dto.shape());
-        shape.setSRID(4326);
-        zone.setShape(shape);
-
-        return zoneRepository.save(zone);
+        return zoneMapper.toResponseDto(updatedZone);
     }
 
     @Transactional
