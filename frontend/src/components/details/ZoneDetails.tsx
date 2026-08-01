@@ -12,7 +12,6 @@ interface ZoneDetailProps {
 
 export const ZoneDetails = ({zoneId, geometry}: ZoneDetailProps) => {
     const {data: zone, isLoading, isError} = useZoneDetail(zoneId);
-    console.log("choosing zone details panel");
     if (isLoading)
         return (
             <Group justify="center" p="xl">

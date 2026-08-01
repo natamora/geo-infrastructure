@@ -1,19 +1,18 @@
-import {ActionIcon, Menu, Tooltip as MantineTooltip} from "@mantine/core";
+import {ActionIcon, Menu, Tooltip} from "@mantine/core";
 import {IconPlus, IconPoint, IconPolygon, IconRoute} from "@tabler/icons-react";
-import {useMapStore} from "../stores/useMapStore.ts";
+import {useMapStore} from "../../stores/useMapStore.ts";
 
 export const CreationMenu = () => {
     const {setMode} = useMapStore();
 
     return (
-        <div style={{position: 'absolute', top: 20, right: 20, zIndex: 1000}}>
             <Menu shadow="md" width={200} position="left-start">
                 <Menu.Target>
-                    <MantineTooltip label="Add new object">
+                    <Tooltip label="Add new object" position="left" >
                         <ActionIcon size="lg" radius="xl" variant="filled" color="blue">
                             <IconPlus size={24}/>
                         </ActionIcon>
-                    </MantineTooltip>
+                    </Tooltip>
                 </Menu.Target>
 
                 <Menu.Dropdown style={{zIndex: 9999}}>
@@ -29,7 +28,6 @@ export const CreationMenu = () => {
                     </Menu.Item>
                 </Menu.Dropdown>
             </Menu>
-        </div>
     );
 
 }

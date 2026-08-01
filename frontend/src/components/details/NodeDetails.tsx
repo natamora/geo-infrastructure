@@ -12,7 +12,6 @@ interface NodeDetailProps {
 
 export const NodeDetails = ({nodeId, geometry}: NodeDetailProps) => {
     const {data: node, isLoading, isError} = useNodeDetail(nodeId);
-    console.log ("choosing node details panel");
     if (isLoading)
         return (
             <Group justify="center" p="xl">

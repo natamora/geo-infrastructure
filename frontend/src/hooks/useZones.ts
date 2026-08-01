@@ -67,3 +67,30 @@ export const useUpdateZone = () => {
         }
     })
 }
+
+export const useDeleteZone = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (id: number) =>  {
+            return Zones.delete(id);
+        },
+        onSuccess: () => {
+            notifications.show({
+                title: 'Success',
+                message: 'Zone was deleted successfully!',
+                color: 'green',
+                position: 'bottom-center'
+            });
+            void queryClient.invalidateQueries({queryKey: ['layer'], exact: false});
+        },
+        onError: (error: any) => {
+            notifications.show({
+                title: 'Error',
+                message: error.response?.data?.message || 'Zone delete failed.',
+                color: 'red',
+                position: 'bottom-center'
+            });
+        }
+    })
+}

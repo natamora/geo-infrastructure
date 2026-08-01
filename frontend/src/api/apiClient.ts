@@ -1,7 +1,7 @@
 import axios, {type AxiosResponse} from 'axios';
 import type {BoundingBoxParams} from "../models/boundingBoxParams.ts";
 import {notifications} from "@mantine/notifications";
-import type {NodeRequest, NodeResponse} from "../models/nodes.ts";
+import type {NodeRequest, NodeResponse, NodeResponseDetails} from "../models/nodes.ts";
 import type {FeatureCollection} from "geojson";
 import type {CableRequest, CableResponse} from "../models/cables.ts";
 import type {ZoneRequest, ZoneResponse} from "../models/zones.ts";
@@ -61,7 +61,7 @@ export const Layers = {
 }
 
 export const Nodes = {
-    getById: (id: number) => requests.get<NodeResponse>(`/nodes/${id}`),
+    getById: (id: number) => requests.get<NodeResponseDetails>(`/nodes/${id}`),
     create: (payload: NodeRequest) => requests.post<NodeResponse>('/nodes', payload),
     update: (id: number, payload: NodeRequest) => requests.put<NodeResponse>(`/nodes/${id}`, payload),
     delete: (id: number) => requests.delete<void>(`/nodes/${id}`),

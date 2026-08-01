@@ -25,3 +25,14 @@ export interface NodeFormValues {
     status: LifeCycleStatus;
     installationDate: Date | null;
 }
+
+export interface NodeResponseDetails {
+    id: number;
+    name: string;
+    type: string;
+    status?: LifeCycleStatus;
+    installationDate?: string | null; // 'YYYY-MM-DD'
+    shape: Point;
+    isDeletable: boolean;
+    connectedCablesCount: number;
+}

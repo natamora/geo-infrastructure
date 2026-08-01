@@ -7,6 +7,8 @@ import lombok.*;
 import org.locationtech.jts.geom.Point;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -38,5 +40,10 @@ public class Node {
     @Column(name = "shape", columnDefinition = "geometry(Point, 4326)")
     private Point shape;
 
+    @OneToMany(mappedBy = "startNode", fetch = FetchType.LAZY)
+    private Set<Cable> startingCables = new HashSet<>();
+
+    @OneToMany(mappedBy = "endNode", fetch = FetchType.LAZY)
+    private Set<Cable> endingCables = new HashSet<>();
 
 }

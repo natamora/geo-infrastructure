@@ -3,6 +3,7 @@ package com.geo.app.service;
 import com.geo.app.domain.entity.Node;
 import com.geo.app.dto.BoundingBox;
 import com.geo.app.dto.nodes.NodeRequestDto;
+import com.geo.app.dto.nodes.NodeResponseDetailsDto;
 import com.geo.app.dto.nodes.NodeResponseDto;
 import com.geo.app.geojson.FeatureCollectionDto;
 import com.geo.app.geojson.GeoJsonMapper;
@@ -33,10 +34,21 @@ public class NodeService {
         return new FeatureCollectionDto(features);
     }
 
-    public NodeResponseDto getNodeById(Long id) {
-        return nodeRepository.findById(id)
-                .map(nodeMapper::toResponseDto)
+    public NodeResponseDetailsDto getNodeById(Long id) {
+        Node node = nodeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Node not found with id: " + id));
+        long connectedCablesCount = node.getStartingCables().size() + node.getEndingCables().size();
+        boolean isDeletable = connectedCablesCount == 0;
+        return new NodeResponseDetailsDto(
+                node.getId(),
+                node.getName(),
+                node.getType(),
+                node.getStatus(),
+                node.getInstallationDate(),
+                null,
+                isDeletable,
+                connectedCablesCount
+        );
     }
 
     public FeatureCollectionDto getNodesInZone(Long zoneId) {

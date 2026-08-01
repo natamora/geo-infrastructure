@@ -3,11 +3,11 @@ import 'leaflet/dist/leaflet.css';
 import './App.css'
 import {LayerTree} from "./components/LayerTree.tsx";
 import {MapController} from "./components/MapController.tsx";
-import {CreationMenu} from "./components/CreationMenu.tsx";
 import {MapLayer} from "./components/MapLayer.tsx";
 import {LAYER_CONFIGS} from "./models/layers.ts";
 import {DetailsPanel} from "./components/details/DetailsPanel.tsx";
 import ModalContainer from "./common/modals/ModalContainer.tsx";
+import {MapControls} from "./components/controls/MapControls.tsx";
 
 function App() {
 
@@ -40,7 +40,7 @@ function App() {
                 ))}
                 <MapController/>
             </MapContainer>
-            <CreationMenu/>
+            <MapControls/>
             <LayerTree/>
             <DetailsPanel/>
             <ModalContainer/>

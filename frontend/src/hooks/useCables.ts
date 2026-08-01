@@ -67,3 +67,30 @@ export const useUpdateCable = () => {
         }
     })
 }
+
+export const useDeleteCable = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (id: number) =>  {
+            return Cables.delete(id);
+        },
+        onSuccess: () => {
+            notifications.show({
+                title: 'Success',
+                message: 'Cable was deleted successfully!',
+                color: 'green',
+                position: 'bottom-center'
+            });
+            void queryClient.invalidateQueries({queryKey: ['layer'], exact: false});
+        },
+        onError: (error: any) => {
+            notifications.show({
+                title: 'Error',
+                message: error.response?.data?.message || 'Cable delete failed.',
+                color: 'red',
+                position: 'bottom-center'
+            });
+        }
+    })
+}

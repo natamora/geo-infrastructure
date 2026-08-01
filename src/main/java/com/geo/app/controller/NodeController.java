@@ -2,6 +2,7 @@ package com.geo.app.controller;
 
 import com.geo.app.dto.BoundingBox;
 import com.geo.app.dto.nodes.NodeRequestDto;
+import com.geo.app.dto.nodes.NodeResponseDetailsDto;
 import com.geo.app.dto.nodes.NodeResponseDto;
 import com.geo.app.geojson.FeatureCollectionDto;
 import com.geo.app.service.NodeService;
@@ -25,8 +26,8 @@ public class NodeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<NodeResponseDto> getNodeById(@PathVariable Long id) {
-        NodeResponseDto responseDto = nodeService.getNodeById(id);
+    public ResponseEntity<NodeResponseDetailsDto> getNodeById(@PathVariable Long id) {
+        NodeResponseDetailsDto responseDto = nodeService.getNodeById(id);
         return ResponseEntity.ok(responseDto);
     }
 

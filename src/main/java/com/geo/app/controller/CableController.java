@@ -3,7 +3,6 @@ package com.geo.app.controller;
 import com.geo.app.dto.BoundingBox;
 import com.geo.app.dto.cables.CableRequestDto;
 import com.geo.app.dto.cables.CableResponseDto;
-import com.geo.app.dto.nodes.NodeResponseDto;
 import com.geo.app.geojson.FeatureCollectionDto;
 import com.geo.app.service.CableService;
 import jakarta.validation.Valid;

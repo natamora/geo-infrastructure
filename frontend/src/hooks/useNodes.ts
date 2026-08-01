@@ -1,10 +1,10 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import type {NodeRequest, NodeResponse} from "../models/nodes.ts";
+import type {NodeRequest, NodeResponseDetails} from "../models/nodes.ts";
 import {Nodes} from "../api/apiClient.ts";
 import {notifications} from "@mantine/notifications";
 
 export const useNodeDetail = (id: number | null) => {
-    return useQuery<NodeResponse, Error>({
+    return useQuery<NodeResponseDetails, Error>({
         queryKey: ['nodes', id],
         queryFn: () => Nodes.getById(id!),
         enabled: Boolean(id),
@@ -61,6 +61,33 @@ export const useUpdateNode = () => {
             notifications.show({
                 title: 'Error',
                 message: error.response?.data?.message || 'Node update failed.',
+                color: 'red',
+                position: 'bottom-center'
+            });
+        }
+    })
+}
+
+export const useDeleteNode = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (id: number) =>  {
+            return Nodes.delete(id);
+        },
+        onSuccess: () => {
+            notifications.show({
+                title: 'Success',
+                message: 'Node was deleted successfully!',
+                color: 'green',
+                position: 'bottom-center'
+            });
+            void queryClient.invalidateQueries({queryKey: ['layer'], exact: false});
+        },
+        onError: (error: any) => {
+            notifications.show({
+                title: 'Error',
+                message: error.response?.data?.message || 'Node delete failed.',
                 color: 'red',
                 position: 'bottom-center'
             });
