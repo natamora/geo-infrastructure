@@ -83,6 +83,7 @@ export const MapController = () => {
             const geoJson = layer.toGeoJSON();
 
             console.log("Zakończono rysowanie. GeoJSON:");
+            console.log("start: " + useMapStore.getState().startNodeId + " end: " + useMapStore.getState().endNodeId);
             console.log(JSON.stringify(geoJson, null, 2));
             notifications.show({
                 message: 'Created shape: ' + JSON.stringify(geoJson, null, 2),
@@ -127,8 +128,8 @@ export const MapController = () => {
                     type: 'FIBER',
                     status: 'ACTIVE',
                     installationDate: null,
-                    startNodeId: useMapStore.getState().startNodeId || null,
-                    endNodeId: null,
+                    startNodeId: useMapStore.getState().startNodeId,
+                    endNodeId: useMapStore.getState().endNodeId,
                 };
                 useModalStore.getState().openModal(
                     <CableForm

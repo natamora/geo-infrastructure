@@ -39,9 +39,14 @@ export const MapLayer = ({layerConfig, pane}: MapLayerProps) => {
                 if (useMapStore.getState().mode === 'DRAW_CABLE') {
                     const isPointLayer = feature.geometry?.type === 'Point';
                     if (isPointLayer) {
-                        useMapStore.getState().setDrawingStartedFromNode(true);
-                        useMapStore.getState().setStartNodeId(feature.properties.id);
-                        console.log("layer-click: Kliknięto w węzeł startowy");
+                        if (!useMapStore.getState().isDrawingStartedFromNode) {
+                            useMapStore.getState().setDrawingStartedFromNode(true);
+                            useMapStore.getState().setStartNodeId(feature.properties.id);
+                            console.log("layer-click: Kliknięto w węzeł startowy: " + feature.properties.id);
+                        } else {
+                            useMapStore.getState().setEndNodeId(feature.properties.id);
+                            console.log("layer-click: Kliknięto w węzeł kolejny: " + feature.properties.id);
+                        }
                     }
                     map.fire('click', e);
                     return;
