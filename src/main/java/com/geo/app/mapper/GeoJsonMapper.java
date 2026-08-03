@@ -1,8 +1,9 @@
-package com.geo.app.geojson;
+package com.geo.app.mapper;
 
 import com.geo.app.domain.entity.Cable;
 import com.geo.app.domain.entity.Node;
 import com.geo.app.domain.entity.Zone;
+import com.geo.app.dto.common.FeatureDto;
 import org.springframework.stereotype.Component;
 import org.wololo.jts2geojson.GeoJSONWriter;
 

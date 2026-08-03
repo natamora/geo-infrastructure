@@ -1,8 +1,9 @@
 package com.geo.app.mapper;
 
 import com.geo.app.domain.entity.Node;
-import com.geo.app.dto.nodes.NodeRequestDto;
-import com.geo.app.dto.nodes.NodeResponseDto;
+import com.geo.app.dto.request.NodeRequestDto;
+import com.geo.app.dto.response.NodeResponseDetailsDto;
+import com.geo.app.dto.response.NodeResponseDto;
 import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Component;
 import org.wololo.jts2geojson.GeoJSONReader;
@@ -38,6 +39,23 @@ public class NodeMapper {
                 node.getStatus(),
                 node.getInstallationDate(),
                 geoJsonPoint
+        );
+    }
+
+    public NodeResponseDetailsDto toResponseDetailsDto(Node node) {
+        org.wololo.geojson.Point geoJsonPoint = (org.wololo.geojson.Point) writer.write(node.getShape());
+        long connectedCablesCount = node.getStartingCables().size() + node.getEndingCables().size();
+        boolean isDeletable = connectedCablesCount == 0;
+
+        return new NodeResponseDetailsDto(
+                node.getId(),
+                node.getName(),
+                node.getType(),
+                node.getStatus(),
+                node.getInstallationDate(),
+                geoJsonPoint,
+                isDeletable,
+                connectedCablesCount
         );
     }
 

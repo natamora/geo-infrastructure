@@ -10,6 +10,7 @@ import org.locationtech.jts.geom.Polygon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,7 @@ public class ZoneIntegrationTest {
     ZoneRepository zoneRepository;
 
     Long zoneId;
+    String zoneName = "Integration Zone";
 
     @BeforeEach
     void init() {
@@ -43,7 +45,7 @@ public class ZoneIntegrationTest {
         });
 
         Zone zone = new Zone();
-        zone.setName("Integration Zone");
+        zone.setName(zoneName);
         zone.setShape(polygon);
 
         zone = zoneRepository.save(zone);
@@ -52,15 +54,14 @@ public class ZoneIntegrationTest {
     }
 
     @Test
-    void shouldReturnFeatureDto() throws Exception {
+    void shouldReturnZoneResponseDto() throws Exception {
 
-        mockMvc.perform(get("/api/zones/{id}", zoneId))
+        mockMvc.perform(get("/api/zones/{id}", zoneId)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.type").value("Feature"))
-                .andExpect(jsonPath("$.geometry.type").value("Polygon"))
-                .andExpect(jsonPath("$.geometry.coordinates[0][0][0]").value(20.0))
-                .andExpect(jsonPath("$.properties.id").value(zoneId))
-                .andExpect(jsonPath("$.properties.name").value("Integration Zone"));
+                .andExpect(jsonPath("$.id").value(zoneId))
+                .andExpect(jsonPath("$.name").value(zoneName))
+                .andExpect(jsonPath("$.shape").exists());
     }
 
     @Test

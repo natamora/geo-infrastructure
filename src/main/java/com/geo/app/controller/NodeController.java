@@ -1,10 +1,11 @@
 package com.geo.app.controller;
 
-import com.geo.app.dto.BoundingBox;
-import com.geo.app.dto.nodes.NodeRequestDto;
-import com.geo.app.dto.nodes.NodeResponseDetailsDto;
-import com.geo.app.dto.nodes.NodeResponseDto;
-import com.geo.app.geojson.FeatureCollectionDto;
+import com.geo.app.dto.common.BoundingBox;
+import com.geo.app.dto.filter.NodeFilterDto;
+import com.geo.app.dto.request.NodeRequestDto;
+import com.geo.app.dto.response.NodeResponseDetailsDto;
+import com.geo.app.dto.response.NodeResponseDto;
+import com.geo.app.dto.common.FeatureCollectionDto;
 import com.geo.app.service.NodeService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +22,8 @@ public class NodeController {
     }
 
     @GetMapping()
-    public FeatureCollectionDto getNodes(BoundingBox bbox) {
-        return nodeService.getNodes(bbox);
+    public FeatureCollectionDto getNodes(@ModelAttribute BoundingBox bbox, @ModelAttribute NodeFilterDto filter) {
+        return nodeService.getNodes(bbox, filter);
     }
 
     @GetMapping("/{id}")

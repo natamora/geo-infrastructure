@@ -1,4 +1,4 @@
-package com.geo.app.dto.cables;
+package com.geo.app.dto.response;
 
 import com.geo.app.domain.enums.CableType;
 import com.geo.app.domain.enums.LifeCycleStatus;

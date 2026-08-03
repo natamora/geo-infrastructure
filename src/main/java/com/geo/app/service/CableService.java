@@ -2,18 +2,23 @@ package com.geo.app.service;
 
 import com.geo.app.domain.entity.Cable;
 import com.geo.app.domain.entity.Node;
-import com.geo.app.dto.BoundingBox;
-import com.geo.app.dto.cables.CableRequestDto;
-import com.geo.app.dto.cables.CableResponseDto;
-import com.geo.app.geojson.FeatureCollectionDto;
-import com.geo.app.geojson.GeoJsonMapper;
+import com.geo.app.dto.common.BoundingBox;
+import com.geo.app.dto.filter.CableFilterDto;
+import com.geo.app.dto.request.CableRequestDto;
+import com.geo.app.dto.response.CableResponseDto;
+import com.geo.app.dto.common.FeatureCollectionDto;
+import com.geo.app.mapper.GeoJsonMapper;
 import com.geo.app.mapper.CableMapper;
 import com.geo.app.repository.CableRepository;
 import com.geo.app.repository.NodeRepository;
+import com.geo.app.specification.CableSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.locationtech.jts.geom.Geometry;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,12 +29,15 @@ public class CableService {
     private final GeoJsonMapper mapper;
     private final CableMapper cableMapper;
 
-    public FeatureCollectionDto getCables(BoundingBox bbox) {
-        var entities = bbox.toGeometry()
-                .map(cableRepository::findByBBox)
-                .orElseGet(cableRepository::findAll);
+    public FeatureCollectionDto getCables(BoundingBox bbox, CableFilterDto filter) {
 
-        var features = entities.stream()
+        Geometry bboxGeometry = Optional.ofNullable(bbox)
+                .flatMap(BoundingBox::toGeometry)
+                .orElse(null);
+        var spec = CableSpecification.filterCables(bboxGeometry, filter);
+
+        var features = cableRepository.findAll(spec)
+                .stream()
                 .map(mapper::toFeatureDto)
                 .toList();
 
@@ -51,9 +59,8 @@ public class CableService {
                 .orElseThrow(() -> new EntityNotFoundException("End node not found with id: " + dto.endNodeId()));
 
         Cable cable = cableMapper.toEntity(dto, startNode, endNode);
-        Cable savedCable = cableRepository.save(cable);
 
-        return cableMapper.toResponseDto(savedCable);
+        return cableMapper.toResponseDto(cableRepository.save(cable));
     }
 
     @Transactional
@@ -68,9 +75,8 @@ public class CableService {
                 .orElseThrow(() -> new EntityNotFoundException("End node not found with id: " + dto.endNodeId()));
 
         cableMapper.updateEntityFromDto(cable, dto, startNode, endNode);
-        Cable updatedCable = cableRepository.save(cable);
 
-        return cableMapper.toResponseDto(updatedCable);
+        return cableMapper.toResponseDto(cableRepository.save(cable));
     }
 
     @Transactional

@@ -1,9 +1,10 @@
 package com.geo.app.controller;
 
-import com.geo.app.dto.BoundingBox;
-import com.geo.app.dto.cables.CableRequestDto;
-import com.geo.app.dto.cables.CableResponseDto;
-import com.geo.app.geojson.FeatureCollectionDto;
+import com.geo.app.dto.common.BoundingBox;
+import com.geo.app.dto.filter.CableFilterDto;
+import com.geo.app.dto.request.CableRequestDto;
+import com.geo.app.dto.response.CableResponseDto;
+import com.geo.app.dto.common.FeatureCollectionDto;
 import com.geo.app.service.CableService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +21,8 @@ public class CableController {
     }
 
     @GetMapping()
-    public FeatureCollectionDto getCables(BoundingBox bbox) {
-        return cableService.getCables(bbox);
+    public FeatureCollectionDto getCables(@ModelAttribute BoundingBox bbox, @ModelAttribute CableFilterDto filter) {
+        return cableService.getCables(bbox, filter);
     }
 
     @GetMapping("/{id}")

@@ -1,6 +1,8 @@
 package com.geo.app.geojson;
 
 import com.geo.app.domain.entity.Zone;
+import com.geo.app.dto.common.FeatureDto;
+import com.geo.app.mapper.GeoJsonMapper;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;

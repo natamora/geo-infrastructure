@@ -1,9 +1,11 @@
 package com.geo.app.controller;
 
-import com.geo.app.dto.BoundingBox;
-import com.geo.app.dto.zones.ZoneRequestDto;
-import com.geo.app.dto.zones.ZoneResponseDto;
-import com.geo.app.geojson.FeatureCollectionDto;
+import com.geo.app.dto.common.BoundingBox;
+import com.geo.app.dto.filter.NodeFilterDto;
+import com.geo.app.dto.filter.ZoneFilterDto;
+import com.geo.app.dto.request.ZoneRequestDto;
+import com.geo.app.dto.response.ZoneResponseDto;
+import com.geo.app.dto.common.FeatureCollectionDto;
 import com.geo.app.service.NodeService;
 import com.geo.app.service.ZoneService;
 import jakarta.validation.Valid;
@@ -22,8 +24,8 @@ public class ZoneController {
     }
 
     @GetMapping()
-    public FeatureCollectionDto getZones(BoundingBox bbox) {
-        return zoneService.getZones(bbox);
+    public FeatureCollectionDto getZones(@ModelAttribute BoundingBox bbox, @ModelAttribute ZoneFilterDto filter) {
+        return zoneService.getZones(bbox, filter);
     }
 
     @GetMapping("/{id}")

@@ -1,4 +1,4 @@
-package com.geo.app.geojson;
+package com.geo.app.dto.common;
 
 import java.util.List;
 

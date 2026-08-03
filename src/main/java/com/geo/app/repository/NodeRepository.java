@@ -3,6 +3,7 @@ package com.geo.app.repository;
 import com.geo.app.domain.entity.Node;
 import org.locationtech.jts.geom.Geometry;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface NodeRepository extends JpaRepository<Node, Long> {
+public interface NodeRepository extends JpaRepository<Node, Long>, JpaSpecificationExecutor<Node> {
 
     @Query("SELECT n FROM Node n WHERE ST_Intersects(n.shape, :bbox) = true")
     List<Node> findByBBox(@Param("bbox") Geometry bbox);

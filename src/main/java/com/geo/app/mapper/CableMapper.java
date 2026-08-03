@@ -2,8 +2,8 @@ package com.geo.app.mapper;
 
 import com.geo.app.domain.entity.Cable;
 import com.geo.app.domain.entity.Node;
-import com.geo.app.dto.cables.CableRequestDto;
-import com.geo.app.dto.cables.CableResponseDto;
+import com.geo.app.dto.request.CableRequestDto;
+import com.geo.app.dto.response.CableResponseDto;
 import org.locationtech.jts.geom.LineString;
 import org.springframework.stereotype.Component;
 import org.wololo.jts2geojson.GeoJSONReader;

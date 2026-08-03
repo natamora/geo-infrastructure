@@ -57,7 +57,8 @@ const requests = {
 
 export const Layers = {
     // dynamic endpoint from layer configuration
-    fetchLayerData: (endpoint: string, bbox: BoundingBoxParams) => requests.get<FeatureCollection>(endpoint, bbox),
+    fetchLayerData: (endpoint: string, bbox: BoundingBoxParams, defaultParams?: Record<string, string | number> ) =>
+        requests.get<FeatureCollection>(endpoint, {...defaultParams, ...bbox}),
 }
 
 export const Nodes = {

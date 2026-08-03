@@ -4,7 +4,7 @@ import './App.css'
 import {LayerTree} from "./components/LayerTree.tsx";
 import {MapController} from "./components/MapController.tsx";
 import {MapLayer} from "./components/MapLayer.tsx";
-import {LAYER_CONFIGS} from "./models/layers.ts";
+import {FLAT_LAYERS} from "./models/layers.ts";
 import {DetailsPanel} from "./components/details/DetailsPanel.tsx";
 import ModalContainer from "./common/modals/ModalContainer.tsx";
 import {MapControls} from "./components/controls/MapControls.tsx";
@@ -14,8 +14,8 @@ function App() {
     return (
         <div style={{height: '100vh', width: '100vw'}}>
             <MapContainer
-                center={[50.0509, 20.0500]}
-                zoom={12}
+                center={[50.0509, 19.9100]}
+                zoom={13}
                 style={{height: '100%', width: '100%'}}
             >
                 <TileLayer
@@ -24,14 +24,14 @@ function App() {
                     opacity={0.6}
                 />
 
-                {LAYER_CONFIGS.map((layer) => (
+                {FLAT_LAYERS.map((layer) => (
                     <Pane
                         key={layer.id}
                         name={`${layer.id}-pane`}
                         style={{zIndex: layer.zIndex}}
                     />
                 ))}
-                {LAYER_CONFIGS.map((layer) => (
+                {FLAT_LAYERS.map((layer) => (
                     <MapLayer
                         key={layer.id}
                         pane={`${layer.id}-pane`}

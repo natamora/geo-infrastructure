@@ -1,6 +1,5 @@
-package com.geo.app.geojson;
+package com.geo.app.dto.common;
 
-import org.wololo.geojson.GeoJSON;
 import org.wololo.geojson.Geometry;
 
 import java.util.Map;

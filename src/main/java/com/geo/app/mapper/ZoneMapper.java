@@ -1,8 +1,8 @@
 package com.geo.app.mapper;
 
 import com.geo.app.domain.entity.Zone;
-import com.geo.app.dto.zones.ZoneRequestDto;
-import com.geo.app.dto.zones.ZoneResponseDto;
+import com.geo.app.dto.request.ZoneRequestDto;
+import com.geo.app.dto.response.ZoneResponseDto;
 import org.locationtech.jts.geom.Polygon;
 import org.springframework.stereotype.Component;
 import org.wololo.jts2geojson.GeoJSONReader;

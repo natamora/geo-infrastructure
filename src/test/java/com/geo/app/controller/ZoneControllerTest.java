@@ -1,8 +1,11 @@
 package com.geo.app.controller;
 
+import com.geo.app.domain.enums.LifeCycleStatus;
+import com.geo.app.domain.enums.ZoneClass;
+import com.geo.app.dto.common.FeatureCollectionDto;
+import com.geo.app.dto.common.FeatureDto;
+import com.geo.app.dto.response.ZoneResponseDto;
 import com.geo.app.exception.ResourceNotFoundException;
-import com.geo.app.geojson.FeatureCollectionDto;
-import com.geo.app.geojson.FeatureDto;
 import com.geo.app.service.NodeService;
 import com.geo.app.service.ZoneService;
 import org.junit.jupiter.api.Test;
@@ -11,7 +14,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.wololo.geojson.GeoJSON;
 import org.wololo.geojson.Polygon;
 
 import java.util.List;
@@ -44,23 +46,28 @@ public class ZoneControllerTest {
     }
 
     @Test
-    void shouldReturnFeatureDtoWhenZoneExists() throws Exception {
-//        Long zoneId = 1L;
-//        String zoneName = "Zone1";
-//        Map<String, Object> properties = Map.of("name", zoneName, "id", zoneId);
-//        Polygon geometry = new Polygon(new double[][][]{{{21.0, 52.0}, {21.1, 52.1}, {21.0, 52.0}}});
-//        FeatureDto mockFeature = new FeatureDto(geometry, properties);
-//
-//        when(zoneService.getZoneById(zoneId)).thenReturn(mockFeature);
-//
-//        mockMvc.perform(get("/api/zones/1")
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.type").value("Feature"))
-//                .andExpect(jsonPath("$.geometry.type").value("Polygon"))
-//                .andExpect(jsonPath("$.geometry.coordinates[0][0][0]").value(21.0))
-//                .andExpect(jsonPath("$.properties.name").value(zoneName))
-//                .andExpect(jsonPath("$.properties.id").value(zoneId));
+    void shouldReturnZoneResponseDtoWhenZoneExists() throws Exception {
+        Long zoneId = 1L;
+        String zoneName = "Zone1";
+        Polygon geometry = new Polygon(new double[][][]{{{21.0, 52.0}, {21.1, 52.1}, {21.0, 52.0}}});
+        ZoneResponseDto mockFeature = new ZoneResponseDto(
+                zoneId,
+                zoneName,
+                ZoneClass.RESIDENTIAL,
+                LifeCycleStatus.ACTIVE,
+                geometry
+        );
+
+        when(zoneService.getZoneById(zoneId)).thenReturn(mockFeature);
+
+        mockMvc.perform(get("/api/zones/{id}", zoneId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(zoneId))
+                .andExpect(jsonPath("$.name").value(zoneName))
+                .andExpect(jsonPath("$.zoneClass").value("RESIDENTIAL"))
+                .andExpect(jsonPath("$.status").value("ACTIVE"))
+                .andExpect(jsonPath("$.shape").exists());
     }
 
     @Test
@@ -77,7 +84,7 @@ public class ZoneControllerTest {
         FeatureDto mockFeature2 = new FeatureDto(geometry, properties2);
         FeatureCollectionDto mockFeatureCollection = new FeatureCollectionDto(List.of(mockFeature1, mockFeature2));
 
-        when(zoneService.getZones(any())).thenReturn(mockFeatureCollection);
+        when(zoneService.getZones(any(), any())).thenReturn(mockFeatureCollection);
 
         mockMvc.perform(get("/api/zones").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

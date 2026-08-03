@@ -23,9 +23,12 @@ export const MapLayer = ({layerConfig, pane}: MapLayerProps) => {
     }
 
     const onEachFeature = (feature: any, layer: L.Layer) => {
-        if (feature.properties?.name) {
+        const geomType = feature.geometry?.type;
+        const isPolygon = geomType === 'Polygon' || geomType === 'MultiPolygon';
+
+        if (feature.properties?.name && !isPolygon) {
             layer.bindTooltip(feature.properties.name, {
-                permanent: true,
+                permanent: false,
                 direction: 'top',
                 // offset: [0, 0],
                 className: 'my-custom-label'

@@ -1,5 +1,5 @@
 import {create} from 'zustand';
-import {LAYER_CONFIGS} from "../models/layers.ts";
+import {FLAT_LAYERS} from "../models/layers.ts";
 
 interface MapState {
     visibleLayers: Record<string, boolean>;
@@ -22,10 +22,10 @@ interface MapState {
 
 export const useMapStore = create<MapState>((set, get) => ({
     mode: 'IDLE',
-    visibleLayers: LAYER_CONFIGS.reduce((acc, l) => ({...acc, [l.id]: true}), {}),
+    visibleLayers: FLAT_LAYERS.reduce((acc, l) => ({...acc, [l.id]: true}), {}),
     selectedFeature: null,
     selectFeature: (feature) => {
-        if(get().mode !== 'IDLE') {
+        if (get().mode !== 'IDLE') {
             return;
         }
         set({selectedFeature: feature});
@@ -50,5 +50,5 @@ export const useMapStore = create<MapState>((set, get) => ({
     setEndNodeId: (id: number) => set({endNodeId: id}),
 
     isDrawingStartedFromNode: false,
-    setDrawingStartedFromNode: (val: boolean) => set({ isDrawingStartedFromNode: val }),
+    setDrawingStartedFromNode: (val: boolean) => set({isDrawingStartedFromNode: val}),
 }));

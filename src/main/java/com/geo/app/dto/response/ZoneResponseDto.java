@@ -1,9 +1,7 @@
-package com.geo.app.dto.zones;
+package com.geo.app.dto.response;
 
 import com.geo.app.domain.enums.LifeCycleStatus;
 import com.geo.app.domain.enums.ZoneClass;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import org.wololo.geojson.Polygon;
 
 

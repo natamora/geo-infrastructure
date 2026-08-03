@@ -16,3 +16,15 @@ body, html, #root {
 .my-custom-label:before {
     display: none !important;
 }
+
+.leaflet-container svg path,
+.leaflet-container svg polyline,
+.leaflet-container svg polygon {
+    outline: none !important;
+}
+
+.leaflet-container svg path:focus,
+.leaflet-container svg polyline:focus,
+.leaflet-container svg polygon:focus {
+    outline: none !important;
+}

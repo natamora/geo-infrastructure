@@ -1,8 +1,9 @@
 package com.geo.app.service;
 
 import com.geo.app.domain.entity.Zone;
-import com.geo.app.geojson.FeatureDto;
-import com.geo.app.geojson.GeoJsonMapper;
+import com.geo.app.dto.response.ZoneResponseDto;
+import com.geo.app.mapper.GeoJsonMapper;
+import com.geo.app.mapper.ZoneMapper;
 import com.geo.app.repository.ZoneRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,27 +24,27 @@ public class ZoneServiceTest {
     private ZoneRepository zoneRepository;
 
     @Mock
-    private GeoJsonMapper geoJsonMapper;
+    private ZoneMapper zoneMapper;
 
     @InjectMocks
     private ZoneService zoneService;
 
     @Test
-    void shouldReturnFeatureDtoWhenZoneExists() {
-//        Long zoneId = 1L;
-//        Zone zone = new Zone();
-//        FeatureDto expectedDto = mock(FeatureDto.class);
-//
-//        when(zoneRepository.findById(zoneId)).thenReturn(Optional.of(zone));
-//        when(geoJsonMapper.toFeatureDto(zone)).thenReturn(expectedDto);
-//
-//        FeatureDto result = zoneService.getZoneById(zoneId);
-//
-//        assertNotNull(result);
-//        assertEquals(expectedDto, result);
-//
-//        verify(zoneRepository).findById(zoneId);
-//        verify(geoJsonMapper).toFeatureDto(zone);
+    void shouldReturnZoneResponseDtoWhenZoneExists() {
+        Long zoneId = 1L;
+        Zone zone = new Zone();
+        ZoneResponseDto expectedDto = mock(ZoneResponseDto.class);
+
+        when(zoneRepository.findById(zoneId)).thenReturn(Optional.of(zone));
+        when(zoneMapper.toResponseDto(zone)).thenReturn(expectedDto);
+
+        ZoneResponseDto result = zoneService.getZoneById(zoneId);
+
+        assertNotNull(result);
+        assertEquals(expectedDto, result);
+
+        verify(zoneRepository).findById(zoneId);
+        verify(zoneMapper).toResponseDto(zone);
 
     }
 }

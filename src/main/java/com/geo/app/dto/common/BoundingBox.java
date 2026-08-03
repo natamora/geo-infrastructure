@@ -1,4 +1,4 @@
-package com.geo.app.dto;
+package com.geo.app.dto.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;

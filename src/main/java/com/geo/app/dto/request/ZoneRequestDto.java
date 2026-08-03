@@ -1,24 +1,21 @@
-package com.geo.app.dto.nodes;
+package com.geo.app.dto.request;
 
 import com.geo.app.domain.enums.LifeCycleStatus;
-import com.geo.app.domain.enums.NodeType;
+import com.geo.app.domain.enums.ZoneClass;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import org.wololo.geojson.Point;
+import org.wololo.geojson.Polygon;
 
-import java.time.LocalDate;
 
-public record NodeRequestDto(
+public record ZoneRequestDto(
         @NotBlank(message = "Name is required")
         String name,
 
-        NodeType type,
+        ZoneClass zoneClass,
 
         LifeCycleStatus status,
 
-        LocalDate installationDate,
-
         @NotNull(message = "Geometry shouldn't be empty")
-        Point shape
+        Polygon shape
 ) {
 }
