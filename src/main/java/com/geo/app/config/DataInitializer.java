@@ -16,7 +16,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -28,6 +27,9 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        if (nodeRepository.count() > 0) {
+            return;
+        }
         Node nMarketPole = createNode("Pole-Rynek", 19.9374, 50.0614, NodeType.POLE);
         Node nWawelManhole = createNode("Manhole-Wawel", 19.9352, 50.0541, NodeType.MANHOLE);
         Node nKazimierzCabinet = createNode("Cabinet-Kazimierz", 19.9482, 50.0512, NodeType.CABINET);

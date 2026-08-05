@@ -1,0 +1,5 @@
+project_id         = "geo-infrastructure"
+region             = "europe-central2"
+db_password        = ""
+artifact_repo_name = "geo-repo"
+cloud_run_name     = "gis-app"

@@ -10,8 +10,8 @@ export const mapCableFormToPayload = (values: CableFormValues, geometry: LineStr
         installationDate: values.installationDate
             ? dayjs(values.installationDate).format('YYYY-MM-DD')
             : null,
-        startNodeId: values.startNodeId,
-        endNodeId: values.endNodeId,
+        startNodeId: values.startNodeId!,
+        endNodeId: values.endNodeId!,
         shape: geometry
     };
 }

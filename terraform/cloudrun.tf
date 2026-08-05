@@ -1,0 +1,51 @@
+resource "google_cloud_run_v2_service" "app" {
+  name     = var.cloud_run_name
+  location = var.region
+  ingress  = "INGRESS_TRAFFIC_ALL"
+
+  template {
+    containers {
+      image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.artifact_repo_name}/gis-app:latest"
+
+      ports {
+        container_port = 8080
+      }
+
+      env {
+        name  = "SPRING_PROFILES_ACTIVE"
+        value = "cloud"
+      }
+      env {
+        name = "DB_PASSWORD"
+        value_source {
+          secret_key_ref {
+            secret  = google_secret_manager_secret.db_password.secret_id
+            version = "latest"
+          }
+        }
+      }
+      env {
+        name  = "DB_HOST"
+        value = google_sql_database_instance.postgres_instance.public_ip_address
+      }
+    }
+  }
+
+  depends_on = [
+    google_secret_manager_secret_version.db_password_version,
+    google_secret_manager_secret_iam_member.secret_access,
+    google_project_service.apis
+  ]
+}
+
+resource "google_cloud_run_v2_service_iam_member" "public_access" {
+  project  = google_cloud_run_v2_service.app.project
+  location = google_cloud_run_v2_service.app.location
+  name     = google_cloud_run_v2_service.app.name
+  role     = "roles/run.invoker"
+  member   = "allUsers"
+}
+
+output "cloud_run_url" {
+  value = google_cloud_run_v2_service.app.uri
+}

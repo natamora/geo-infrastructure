@@ -7,7 +7,7 @@ import type {CableRequest, CableResponse} from "../models/cables.ts";
 import type {ZoneRequest, ZoneResponse} from "../models/zones.ts";
 
 const api = axios.create({
-    baseURL: 'http://localhost:8080/api',
+    baseURL: '/api',
     headers: {
         'Content-Type': 'application/json',
     },
