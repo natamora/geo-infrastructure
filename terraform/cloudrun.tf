@@ -4,6 +4,10 @@ resource "google_cloud_run_v2_service" "app" {
   ingress  = "INGRESS_TRAFFIC_ALL"
 
   template {
+    scaling {
+      max_instance_count = 3
+      min_instance_count = 0
+    }
     containers {
       image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.artifact_repo_name}/gis-app:latest"
 
