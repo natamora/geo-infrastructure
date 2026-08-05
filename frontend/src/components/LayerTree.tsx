@@ -43,7 +43,7 @@ export const LayerTree = () => {
         <div style={{ position: 'absolute', bottom: 20, left: 20, zIndex: 1000 }}>
             <Paper p="md" style={{ minWidth: 200 }}>
                 <Stack gap="sm">
-                    <Text size="sm" fw={700}>Map layers</Text>
+                    <Text size="sm" fw={700}>Layers</Text>
                     <Stack gap={8}>
                         {LAYER_CONFIGS.map((layer) => renderNode(layer))}
                     </Stack>

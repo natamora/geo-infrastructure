@@ -32,3 +32,9 @@ resource "google_project_iam_member" "trigger_sa_user" {
   role    = "roles/iam.serviceAccountUser"
   member  = "serviceAccount:${google_service_account.cloudbuild_trigger_sa.email}"
 }
+
+resource "google_project_iam_member" "trigger_sa_log_writer" {
+  project = var.project_id
+  role    = "roles/logging.logWriter"
+  member  = "serviceAccount:${google_service_account.cloudbuild_trigger_sa.email}"
+}
