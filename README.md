@@ -1,4 +1,8 @@
 # :globe_with_meridians: Geo-Infrastructure API (WIP)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Try%20Now-green?style=flat-square)](https://gis-app-756185080491.europe-central2.run.app)
+
+> ⚠️ **Note:** The webpage may take a few minutes to load due to cold start.
+
 A GeoSpatial API built to serve as a technical sandbox for mastering Spring Boot, modern Java and GIS technologies.
 
 ## Project Vision
@@ -13,36 +17,37 @@ Technically, the proejct is testbed for:
 * Modern Java: Leveraging Java 21 features
 * Spring Ecosystem: Mastering dependency injection, REST controller design, validation and comprehensive testing strategies
 * Database Management & ORM - Bridging Hibernate/JPA integration with PostgreSQL/PostGIS, managing entity relationships and utilizing spatial indexing
-* DevOps Foundation - Ensuring infrastructure reproducibility and automated testing pipelines
+* DevOps Foundation - Fully automated deployment pipeline using **Google Cloud Build**, container storage in **Artifact Registry**, serverless hosting on **Google Cloud Run**, and infrastructure provisioning via **Terraform**
+* Frontend Integration: A dedicated interactive frontend built with TypeScript, React, TanStack Query, Zustand, and Leaflet
 
 The goal is to deliver backend solution that utilizes Spring-based architecture with added analytical capability of spatial data processing.
 
 ## :hammer: Technology & Tooling
 * **Core Backend**: Java 21, Spring Boot 3.x
 * **Persistence & Spatial**: PostgreSQL with PostGIS, Hibernate/JPA, JTS
-* **Contenerization & DevOps**: Docker, Docker Compose, Google Cloud Run (target)
+* **Cloud & DevOps**: Google Cloud Run, Google Cloud Build, Artifact Registry, Terraform, Docker
 * **Testing**: JUnit 5, Mockito, AssertJ, Testcontainers (target for ephemeral database testing)
 * **API & Data**: RESTful architecture, GeoJSON for spatial data serialization
 * **Frontend**: TypeScript, React, TanStack Query, Zustand, Leaflet
 
-## :white_check_mark: Implementation Status
+## :white_check_mark: Implementation Status'
+* Fully containerized and automated deployment pipeline (Terraform + Cloud Build + Cloud Run)
 * Basic Frontend: Adding dynamic layers, Shape geometry creation, DetailsPanel, LayerTree
-* Basic CRUD endpoints for objects
-*  Project skeleton with JTS and PostGIS integration
-* Basic GET endpoints for geometries with GeoJSON mapping with BBOX filtering
+* Core CRUD endpoints for infrastructure objects
+* Project skeleton with JTS and PostGIS spatial integration
+* GET endpoints for geometries with GeoJSON mapping and BBOX filtering
 * Basic endpoint with spatial filtering (ST_Intersects)
 * Simple global exception handling
 * Basic multi-layered test coverage example (Unit, Service, Controller and Integration tests)
+* API shape filtering by types, dates etc.
+* Integrating simple Swagger
 
 ### :dart: Most recent pending goals: 
-* [ ] Improve frontend (WIP)
-* [ ] Full Node and Cable implementation (WIP)
-* [ ] Data validation (WIP)
+* [ ] Add shape filtering depends on the date range (WIP)
+* [ ] Full Data validation (WIP)
 * [ ] Risk Assessment Engine & maintenance task generation logic
-* [ ] Advanced API filtering
-* [ ] Integrating Swagger (WIP)
+* [ ] Automated weekly update email sending 
 * [ ] Spring Security
-* [ ] Cloud-native migration and deployment with Google Cloud Run (WIP)
 
 Application goals gonna be updated by the evolving of the application.
 
