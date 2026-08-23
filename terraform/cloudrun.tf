@@ -6,10 +6,10 @@ resource "google_cloud_run_v2_service" "app" {
   template {
     scaling {
       max_instance_count = 3
-      min_instance_count = 0
+      min_instance_count = 1
     }
     containers {
-      image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.artifact_repo_name}/gis-app:latest"
+      image = "us-docker.pkg.dev/cloudrun/container/hello"
 
       ports {
         container_port = 8080
@@ -33,6 +33,12 @@ resource "google_cloud_run_v2_service" "app" {
         value = google_sql_database_instance.postgres_instance.public_ip_address
       }
     }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      template,
+    ]
   }
 
   depends_on = [

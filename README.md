@@ -1,5 +1,5 @@
 # :globe_with_meridians: Geo-Infrastructure API (WIP)
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Try%20Now-green?style=flat-square)](https://gis-app-756185080491.europe-central2.run.app)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Try%20Now-green?style=flat-square)](https://gis-app-80843192607.europe-central2.run.app)
 
 > ⚠️ **Note:** The webpage may take a few minutes to load due to cold start.
 
