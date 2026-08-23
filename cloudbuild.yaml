@@ -8,11 +8,11 @@ substitutions:
   _TF_DIR: "terraform"
 
 steps:
-  - name: 'hashicorp/terraform:1.6.0'
+  - name: 'hashicorp/terraform:1.13.5'
     args: [ 'init' ]
     dir: '${_TF_DIR}'
 
-  - name: 'hashicorp/terraform:1.6.0'
+  - name: 'hashicorp/terraform:1.13.5'
     args: [ 'apply', '-auto-approve' ]
     dir: '${_TF_DIR}'
 
