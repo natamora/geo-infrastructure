@@ -1,7 +1,7 @@
 data "google_project" "project" {}
 
 locals {
-  cloud_build_sa = "${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
+  cloud_build_sa = "${data.google_project.project.number}-compute@developer.gserviceaccount.com"
 }
 
 resource "google_project_iam_member" "cloudbuild_run_admin" {
