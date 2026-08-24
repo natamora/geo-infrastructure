@@ -16,6 +16,7 @@ provider "google" {
 // enable apis
 resource "google_project_service" "apis" {
   for_each = toset([
+    "cloudresourcemanager.googleapis.com",
     "artifactregistry.googleapis.com",
     "run.googleapis.com",
     "sqladmin.googleapis.com",
