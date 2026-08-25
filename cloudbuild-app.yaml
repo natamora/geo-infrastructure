@@ -5,23 +5,8 @@ substitutions:
   _REGION: "europe-central2"
   _AR_REPO: "geo-repo"
   _IMAGE: "gis-app"
-  _TF_DIR: "terraform"
 
 steps:
-  - name: 'hashicorp/terraform:1.13.5'
-    args: [ 'init' ]
-    dir: '${_TF_DIR}'
-
-  - name: 'hashicorp/terraform:1.13.5'
-    args: [ 'apply', '-auto-approve', '-var=db_password=${_DB_PASSWORD}' ]
-    dir: '${_TF_DIR}'
-    env:
-      - 'TF_VAR_project_id=$PROJECT_ID'
-      - 'TF_VAR_region=${_REGION}'
-      - 'TF_VAR_artifact_repo_name=${_AR_REPO}'
-      - 'TF_VAR_cloud_run_name=${_IMAGE}'
-      - 'TF_VAR_db_password=${_DB_PASSWORD}'
-
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 'build', '-t', '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_IMAGE}:$COMMIT_SHA', '-t', '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_IMAGE}:latest', '.' ]
 
