@@ -8,7 +8,7 @@ resource "google_secret_manager_secret_iam_member" "app_secret_access" {
   role      = "roles/secretmanager.secretAccessor"
   member    = "serviceAccount:${google_service_account.app_runtime_sa.email}"
 
-  depends_on = [
-    google_service_account.app_runtime_sa
-  ]
+  lifecycle {
+    create_before_destroy = true
+  }
 }
