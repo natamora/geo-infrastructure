@@ -8,6 +8,7 @@ resource "google_cloud_run_v2_service" "app" {
       max_instance_count = 3
       min_instance_count = 1
     }
+    service_account = google_service_account.app_runtime_sa.email
     containers {
       image = "us-docker.pkg.dev/cloudrun/container/hello"
 
@@ -43,7 +44,7 @@ resource "google_cloud_run_v2_service" "app" {
 
   depends_on = [
     google_secret_manager_secret_version.db_password_version,
-    google_secret_manager_secret_iam_member.tf_sa_secret_access,
+    google_secret_manager_secret_iam_member.app_secret_access,
     google_project_service.apis
   ]
 }
