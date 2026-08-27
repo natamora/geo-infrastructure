@@ -1,26 +1,31 @@
-# :globe_with_meridians: Geo-Infrastructure API (WIP)
+# :globe_with_meridians: Geo-Infrastructure App (WIP)
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Try%20Now-green?style=flat-square)](https://gis-app-80843192607.europe-central2.run.app)
 
-> ⚠️ **Note:** The webpage may take a few minutes to load due to cold start.
+> [!WARNING]
+> **Note:** The webpage may take a few minutes to load due to cold start.
 
-A GeoSpatial API built to serve as a technical sandbox for mastering Spring Boot, modern Java and GIS technologies.
+A Full-Stack GeoSpatial application built to serve as a technical sandbox for mastering modern Java, Spring Boot and GIS technologies.
+
+---
 
 ## Project Vision
-This project is a backend-focused engineering sandbox designed to master the spectrum of backend development and explore the integration of geospatial data processing with modern **Spring Boot 3.x** and **Java 21**. 
+This project is an engineering sandbox designed to explore the integration of geospatial data processing with a modern **Spring Boot 3.x** and **Java 21** backend, paired with an interactive **React** frontend. 
 
-The primary objective is to build REST API that models infrastructure networks, maintaining topological relationships between Nodes (Point), Cables (LineString) and Zones (Polygon).
+The application models and visualizes infrastructure networks. It provides an interactive map where users can manage Nodes (Point), Cables (LineString) and Zones (Polygon).
 
-The system architecture utilizes PostGIS to enable advanced geometric opeations. By simulating infrastructure dependencies, the project allows for testing spatial querying, such as point-in-polygon containment.
-The app will implement custom business logic to evaluate infrastructure risk and trigger maintenance task lifecycles. Future deployment is planned on Google Cloud Run.
+The core functionality allows users to:
+* Toggle and browse different infrastructure layers
+* Click on specific objects on the map to view their detailed properties
+* Draw and create new infrastructure shapes directly via the UI
 
-Technically, the proejct is testbed for:
-* Modern Java: Leveraging Java 21 features
-* Spring Ecosystem: Mastering dependency injection, REST controller design, validation and comprehensive testing strategies
-* Database Management & ORM - Bridging Hibernate/JPA integration with PostgreSQL/PostGIS, managing entity relationships and utilizing spatial indexing
-* DevOps Foundation - Fully automated deployment pipeline using **Google Cloud Build**, container storage in **Artifact Registry**, serverless hosting on **Google Cloud Run**, and infrastructure provisioning via **Terraform**
-* Frontend Integration: A dedicated interactive frontend built with TypeScript, React, TanStack Query, Zustand, and Leaflet
+Behind the scenes, the system utilizes **PostgreSQL + PostGIS** to maintain topological relationships and enable advanced geometric operations (e.g., spatial filtering or point-in-polygon containment). In the future, the app will implement custom business logic to evaluate infrastructure risks and trigger maintenance task lifecycles. It will also use **Google Cloud Functions** to prepare and send a weekly report about the state of the infrastructure.
 
-The goal is to deliver backend solution that utilizes Spring-based architecture with added analytical capability of spatial data processing.
+Technically, the project is a testbed for:
+* **Modern Java:** Leveraging Java 21 features
+* **Spring Ecosystem:** Mastering dependency injection, REST controller design, data validation, and testing strategies
+* **Database Management & ORM:** Bridging Hibernate/JPA integration with PostGIS, managing entity relationships, and utilizing spatial indexing
+* **Frontend Integration:** A dedicated interactive client built with TypeScript, React, TanStack Query, Zustand, and Leaflet.
+* **Cloud & DevOps:** Provisioning GCP infrastructure via **Terraform**, managing automated GitOps pipelines in **Cloud Build**, and serverless hosting on **Cloud Run**.
 
 ## :hammer: Technology & Tooling
 * **Core Backend**: Java 21, Spring Boot 3.x
@@ -30,25 +35,69 @@ The goal is to deliver backend solution that utilizes Spring-based architecture 
 * **API & Data**: RESTful architecture, GeoJSON for spatial data serialization
 * **Frontend**: TypeScript, React, TanStack Query, Zustand, Leaflet
 
-## :white_check_mark: Implementation Status'
-* Fully containerized and automated deployment pipeline (Terraform + Cloud Build + Cloud Run)
-* Basic Frontend: Adding dynamic layers, Shape geometry creation, DetailsPanel, LayerTree
-* Core CRUD endpoints for infrastructure objects
-* Project skeleton with JTS and PostGIS spatial integration
-* GET endpoints for geometries with GeoJSON mapping and BBOX filtering
-* Basic endpoint with spatial filtering (ST_Intersects)
-* Simple global exception handling
+---
+
+## :building_construction: Architecture & CI/CD
+This project is deployed on **Google Cloud Platform (GCP)** using **Terraform** for Infrastructure as Code (IaC) and **Google Cloud Build** for automated CI/CD pipelines.
+
+### Managed Resources
+* **Cloud Run (`cloudrun.tf`)** - Serverless  environment running app container
+* **Cloud SQL (`db.tf`)** – Managed PostgreSQL database
+* **Secret Manager (`secret.tf`)** – Storage for sensitive data (database password)
+* **Artifact Registry (`artifact-registry.tf`)** – Repository for Docker images
+* **IAM (`iam_*.tf`)** – Role bindings for Service Accounts
+  
+### Overview
+
+The CI/CD workflow is fully automated via **Google Cloud Build** and divided into two separate GitOps pipelines to avoid unnecessary redeployments:
+
+* **Infrastructure Pipeline:** Triggered only when `.tf` files change.
+* **Application Pipeline:** Triggered by updates to the source code (ignoring Terraform configurations). It builds the Docker image, pushes it to Artifact Registry, and deploys the new revision to Cloud Run
+  
+```text
+[ Git Push ] 
+        │
+        ▼
+   [ Cloud Build ] 
+        ├── (1) Infrastructure Pipeline ──► Updates GCP Infrastructure
+        │                                  ├── Cloud SQL (PostgreSQL Database)
+        │                                  ├── Secret Manager (Passwords)
+        │                                  ├── Artifact Registry (Docker Repositories)
+        │                                  └── Cloud Run v2 (Serverless Application)
+        │
+        └── (2) Deployment Pipeline ──► Build Docker Image, Pushes it to Artifact Registry & Deploys to Cloud Run
+                                           │
+                                           ▼
+                                    [ Cloud Run Service ] ──► [ Cloud SQL ]
+```
+
+### :lock: IAM
+To ensure a secure separation of concerns, the project utilizes dedicated Service Accounts (SA) with minimal required permissions:
+1. **Terraform Deployer SA (`terraform-deployer-sa`)**
+   * Provisions and updates GCP infrastructure.
+2. **Cloud Build Trigger SA (`cloudbuild-trigger-sa`)**
+   * Handles the CI/CD application pipeline. Can push images to Artifact Registry, update Cloud Run services, and manage storage/logs.
+3. **App Runtime SA (`app-runtime-sa`)**
+   * Attached directly to the Cloud Run service to execute the application code. Currently allows the app to securely access database password from secret manager
+
+---
+
+## :white_check_mark: Implementation Status
+* Fully containerized and automated deployment pipeline (Terraform + Cloud Build + Cloud Run) with strict IAM Service Account segregation
+* Basic interactive UI with dynamic layers, Shape geometry creation, DetailsPanel, and LayerTree
+* Core CRUD endpoints for infrastructure objects with simple exception handling
+* Project skeleton with JTS and PostGIS integration
+* GET endpoints for geometries with GeoJSON mapping and BBOX filtering, and basic spatial filtering (ST_Intersects).
 * Basic multi-layered test coverage example (Unit, Service, Controller and Integration tests)
-* API shape filtering by types, dates etc.
-* Integrating simple Swagger
+* API object filtering by types, date range etc.
+* Basic integration with Swagger
 
 ### :dart: Most recent pending goals: 
-* [ ] Add shape filtering depends on the date range (WIP)
+* [ ] Secure database connection by migrating Cloud SQL from Public IP to Private IP (VPC) / Cloud SQL Auth Proxy
+* [ ] Implement frontend UI for date-based shape filtering (WIP)
 * [ ] Full Data validation (WIP)
 * [ ] Risk Assessment Engine & maintenance task generation logic
 * [ ] Automated weekly update email sending 
 * [ ] Spring Security
 
-Application goals gonna be updated by the evolving of the application.
-
-
+Application goals will be updated as the project evolves.
